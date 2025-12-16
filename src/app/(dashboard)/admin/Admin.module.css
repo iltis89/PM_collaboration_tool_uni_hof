@@ -1,0 +1,171 @@
+.container {
+    max-width: 900px;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+}
+
+.tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--foreground-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.tab:hover {
+    background: var(--surface-highlight);
+    color: var(--foreground);
+}
+
+.tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: black;
+}
+
+.content {
+    margin-top: 24px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input,
+.textarea {
+    width: 100%;
+    padding: 16px;
+    background: var(--surface-highlight);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--foreground);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition-fast);
+}
+
+.input:focus,
+.textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.fileUpload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--foreground-muted);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.fileUpload:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.fileUpload input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.submitBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 24px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: black;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    margin-top: 8px;
+}
+
+.submitBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   MOBILE RESPONSIVE STYLES
+   ============================================ */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.8rem;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .tab {
+        padding: 10px 14px;
+        font-size: 0.8rem;
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .form {
+        gap: 12px;
+    }
+
+    .input,
+    .textarea {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .submitBtn {
+        padding: 14px 20px;
+        font-size: 0.9rem;
+    }
+
+    .fileUpload {
+        padding: 24px;
+    }
+}

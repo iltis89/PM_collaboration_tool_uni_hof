@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String    // Hashed password
+  name      String
+  role      Role      @default(STUDENT)
+  xp        Int       @default(0)
+  level     Int       @default(1)
+  streak    Int       @default(0)
+  privacyAccepted   Boolean   @default(false)
+  privacyAcceptedAt DateTime?
+  progress  Progress[]
+  threads   Thread[]
+  messages  Message[]
+  examResults ExamResult[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  mustChangePassword Boolean @default(false)
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+model Material {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  fileUrl     String?
+  size        String?
+  uploadedBy  String?
+  uploadedAt  DateTime @default(now())
+}
+
+model News {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  author    String?
+  reactions NewsReaction[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NewsReaction {
+  id        String   @id @default(cuid())
+  newsId    String
+  news      News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  userId    String
+  emoji     String   // The emoji character like "👍", "❤️", "🎉", etc.
+  createdAt DateTime @default(now())
+
+  @@unique([newsId, userId]) // One reaction per user per news item
+}
+
+model Exam {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  duration    Int            // in minutes
+  questions   QuizQuestion[]
+  results     ExamResult[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model QuizQuestion {
+  id       String   @id @default(cuid())
+  question String
+  options  String[] // Array of options
+  correct  Int      // Index of correct answer (0-based)
+  category String?  // e.g., "Layer 01", "Layer 02"
+  explanation String? // Explanation for the correct answer
+  Exam     Exam?    @relation(fields: [examId], references: [id])
+  examId   String?
+}
+
+model ExamResult {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examId      String
+  exam        Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  score       Int
+  passed      Boolean
+  completedAt DateTime @default(now())
+}
+
+model Progress {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId      String?
+  materialId  String?
+  completed   Boolean   @default(false)
+  score       Int?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+// ============== COLLABORATION ==============
+
+model Thread {
+  id        String    @id @default(cuid())
+  title     String
+  content   String
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  threadId  String
+  thread    Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model AudioSnippet {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  url         String
+  duration    Int?     // Duration in seconds
+  uploadedBy  String?
+  uploadedAt  DateTime @default(now())
+}
+
+model Lecture {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  room        String?
+  professor   String?
+  startTime   DateTime
+  endTime     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

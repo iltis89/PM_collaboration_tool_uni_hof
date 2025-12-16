@@ -1,0 +1,207 @@
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 48px;
+    padding-left: 12px;
+}
+
+.logoIcon {
+    width: 24px;
+    height: 24px;
+    background: var(--accent);
+    border-radius: 6px;
+}
+
+.logoText {
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    color: var(--foreground-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.navItem:hover {
+    background: var(--surface-highlight);
+    color: var(--foreground);
+}
+
+.active {
+    background: var(--surface-highlight);
+    color: var(--foreground);
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+    padding-top: 24px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--surface-highlight);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.userName {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.userRole {
+    font-size: 0.75rem;
+    color: var(--foreground-muted);
+    cursor: pointer;
+}
+
+.userRole:hover {
+    text-decoration: underline;
+}
+
+.logoutBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    margin-top: 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--foreground-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.logoutBtn:hover {
+    background: rgba(255, 100, 100, 0.1);
+    border-color: #ff6666;
+    color: #ff6666;
+}
+
+/* Mobile Header - Hidden on desktop */
+.mobileHeader {
+    display: none;
+}
+
+/* Overlay - Hidden by default */
+.overlay {
+    display: none;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE STYLES
+   ============================================ */
+@media (max-width: 768px) {
+
+    /* Hide sidebar by default on mobile */
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        width: 280px;
+    }
+
+    /* Show sidebar when open */
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Mobile Header Bar */
+    .mobileHeader {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        padding: 0 16px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        z-index: 99;
+    }
+
+    .hamburger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        color: var(--foreground);
+        cursor: pointer;
+        transition: var(--transition-fast);
+    }
+
+    .hamburger:hover {
+        background: var(--surface-highlight);
+    }
+
+    .mobileTitle {
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--foreground);
+    }
+
+    /* Overlay */
+    .overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        z-index: 99;
+    }
+}

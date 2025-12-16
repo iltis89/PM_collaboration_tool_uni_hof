@@ -1,0 +1,131 @@
+.container {
+    height: calc(100vh - 6rem);
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.newButton {
+    padding: 12px 24px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.newButton:hover {
+    opacity: 0.9;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 24px;
+    flex: 1;
+    min-height: 0;
+}
+
+.threadsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.tabs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    color: var(--foreground-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding-bottom: 12px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.activeTab {
+    color: var(--foreground);
+    border-bottom-color: var(--accent);
+}
+
+.threadList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chatColumn {
+    height: 100%;
+}
+
+.chatCard {
+    height: 100%;
+    background: rgba(17, 17, 17, 0.5);
+}
+
+/* ============================================
+   MOBILE RESPONSIVE STYLES
+   ============================================ */
+@media (max-width: 768px) {
+    .container {
+        height: auto;
+        min-height: calc(100vh - 100px);
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .newButton {
+        width: 100%;
+        text-align: center;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .threadsColumn {
+        max-height: 300px;
+        padding-right: 0;
+    }
+
+    .chatColumn {
+        min-height: 400px;
+    }
+
+    .tabs {
+        gap: 8px;
+    }
+
+    .tab {
+        font-size: 0.85rem;
+        flex: 1;
+        text-align: center;
+    }
+}

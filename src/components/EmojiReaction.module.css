@@ -1,0 +1,115 @@
+.container {
+    margin-top: 16px;
+    position: relative;
+}
+
+.reactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.reactionBadge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--surface-highlight);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-size: 1rem;
+}
+
+.reactionBadge:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent);
+}
+
+.reactionBadge.active {
+    background: rgba(var(--accent-rgb), 0.2);
+    border-color: var(--accent);
+}
+
+.count {
+    font-size: 0.8rem;
+    color: var(--foreground-muted);
+    font-weight: 500;
+}
+
+.addButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: 50%;
+    color: var(--foreground-muted);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.addButton:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    border-style: solid;
+}
+
+.addButton span {
+    font-size: 1.2rem;
+}
+
+.picker {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 4px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+.emojiOption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.emojiOption:hover {
+    background: var(--surface-highlight);
+    transform: scale(1.2);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .picker {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+    }
+
+    .emojiOption {
+        width: 44px;
+        height: 44px;
+        font-size: 1.6rem;
+    }
+}

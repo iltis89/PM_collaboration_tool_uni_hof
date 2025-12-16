@@ -1,0 +1,154 @@
+.playerContainer {
+    background: var(--surface-highlight);
+    /* Slightly lighter than card bg */
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.description {
+    font-size: 0.9rem;
+    color: var(--foreground-muted);
+    margin: -8px 0 8px 0;
+}
+
+.downloadBtn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--foreground);
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.downloadBtn:hover {
+    border-color: var(--foreground-muted);
+    background: var(--surface-hover);
+}
+
+.controlsLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.progressContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Custom Range Input */
+.progressBar {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface);
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-repeat: no-repeat;
+    outline: none;
+    cursor: pointer;
+}
+
+.progressBar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--accent-glow);
+    transition: transform 0.1s;
+}
+
+.progressBar::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.timeInfo {
+    font-size: 0.75rem;
+    color: var(--foreground-muted);
+    font-family: monospace;
+}
+
+.mainControls {
+    display: flex;
+    justify-content: center;
+    /* Centered controls */
+    align-items: center;
+    gap: 32px;
+}
+
+.playBtn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #000;
+    /* Contrast on accent color */
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.playBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px var(--accent-glow);
+}
+
+.playBtn:active {
+    transform: scale(0.95);
+}
+
+.secondaryBtn {
+    background: none;
+    border: none;
+    color: var(--foreground-muted);
+    cursor: pointer;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.secondaryBtn:hover {
+    color: var(--foreground);
+}
+
+.speedBtn {
+    background: none;
+    border: none;
+    color: var(--foreground);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    width: 40px;
+    text-align: center;
+}
