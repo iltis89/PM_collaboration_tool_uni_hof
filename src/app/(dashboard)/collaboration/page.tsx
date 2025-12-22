@@ -530,7 +530,7 @@ export default function Collaboration() {
                                                     justifyContent: isAndUser ? 'flex-end' : 'flex-start',
                                                     gap: '8px'
                                                 }}>
-                                                    {isAndUser && (
+                                                    {canEdit(msg.authorId) && (
                                                         <div style={{ display: 'flex', gap: '4px' }}>
                                                             <button
                                                                 onClick={() => {

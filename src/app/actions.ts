@@ -75,6 +75,7 @@ export async function getCurrentUser() {
 // ============== USERS (Admin) ==============
 
 export async function getUsers() {
+    await requireAdmin()
     return prisma.user.findMany({
         select: { id: true, email: true, name: true, role: true, xp: true, level: true, createdAt: true, privacyAccepted: true, privacyAcceptedAt: true },
         orderBy: { createdAt: 'desc' },
@@ -82,6 +83,7 @@ export async function getUsers() {
 }
 
 export async function getAdminStats() {
+    await requireAdmin()
     const userCount = await prisma.user.count({ where: { role: 'STUDENT' } });
     const totalExams = await prisma.examResult.count();
     const passedExams = await prisma.examResult.count({ where: { passed: true } });
@@ -104,6 +106,7 @@ export async function getAdminStats() {
 }
 
 export async function createUser(data: { email: string; name: string; password: string; role?: 'STUDENT' | 'ADMIN' }) {
+    await requireAdmin()
     const hashedPassword = await hash(data.password, 12)
     return prisma.user.create({
         data: {
@@ -128,6 +131,7 @@ export async function acceptPrivacy() {
 }
 
 export async function deleteUser(id: string) {
+    await requireAdmin()
     return prisma.user.delete({ where: { id } })
 }
 
@@ -141,10 +145,12 @@ export async function getMaterials() {
 }
 
 export async function createMaterial(data: { title: string; description?: string; fileUrl?: string; size?: string; topicId?: string }) {
+    await requireAdmin()
     return prisma.material.create({ data })
 }
 
 export async function deleteMaterial(id: string) {
+    await requireAdmin()
     return prisma.material.delete({ where: { id } })
 }
 
@@ -158,10 +164,12 @@ export async function getCurriculumTopics() {
 }
 
 export async function createCurriculumTopic(data: { title: string; description?: string; order: number; date?: Date; status?: 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED' }) {
+    await requireAdmin()
     return prisma.curriculumTopic.create({ data })
 }
 
 export async function updateCurriculumTopic(id: string, data: { title?: string; description?: string; order?: number; date?: Date; status?: 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED' }) {
+    await requireAdmin()
     return prisma.curriculumTopic.update({
         where: { id },
         data
@@ -169,6 +177,7 @@ export async function updateCurriculumTopic(id: string, data: { title?: string; 
 }
 
 export async function deleteCurriculumTopic(id: string) {
+    await requireAdmin()
     return prisma.curriculumTopic.delete({ where: { id } })
 }
 
@@ -181,10 +190,12 @@ export async function getNews() {
 }
 
 export async function createNews(data: { title: string; content: string; author?: string }) {
+    await requireAdmin()
     return prisma.news.create({ data })
 }
 
 export async function deleteNews(id: string) {
+    await requireAdmin()
     return prisma.news.delete({ where: { id } })
 }
 
@@ -249,6 +260,14 @@ async function requireAuth() {
     const user = await getCurrentUser()
     if (!user) {
         throw new Error('Nicht authentifiziert')
+    }
+    return user
+}
+
+async function requireAdmin() {
+    const user = await requireAuth()
+    if (user.role !== 'ADMIN') {
+        throw new Error('Keine Admin-Berechtigung')
     }
     return user
 }
