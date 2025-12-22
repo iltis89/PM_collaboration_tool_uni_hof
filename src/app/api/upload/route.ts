@@ -1,5 +1,6 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
+import { getSession } from '@/lib/auth';
 
 export async function POST(request: Request): Promise<NextResponse> {
     const body = (await request.json()) as HandleUploadBody;
@@ -12,9 +13,11 @@ export async function POST(request: Request): Promise<NextResponse> {
                 pathname: string,
                 /* clientPayload */
             ) => {
-                // Authenticate user here if needed
-                // const user = await auth(request);
-                // if (!user) throw new Error('Unauthorized');
+                // Authenticate user here
+                const session = await getSession();
+                if (!session || !session.user) {
+                    throw new Error('Unauthorized');
+                }
 
                 return {
                     allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/x-m4a'],

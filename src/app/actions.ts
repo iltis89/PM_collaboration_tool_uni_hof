@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma'
 import { compare, hash } from 'bcryptjs'
 import { cookies } from 'next/headers'
+import { encrypt, decrypt, getSession } from '@/lib/auth'
 
 // ============== AUTH ==============
 
@@ -20,11 +21,28 @@ export async function login(email: string, password: string) {
         return { success: false, error: 'Falsches Passwort' }
     }
 
-    // Set a simple cookie for session
+    // Create session
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    const sessionCookie = await encrypt({
+        user: {
+            id: user.id,
+            email: user.email,
+            role: user.role
+        },
+        expires
+    })
+
     const cookieStore = await cookies()
-    const isProduction = process.env.NODE_ENV === 'production'
-    cookieStore.set('userId', user.id, { httpOnly: true, secure: isProduction })
-    cookieStore.set('userRole', user.role, { httpOnly: true, secure: isProduction })
+    cookieStore.set('session', sessionCookie, {
+        expires,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+    })
+
+    // Clean up old cookies if they exist
+    cookieStore.delete('userId')
+    cookieStore.delete('userRole')
 
     return {
         success: true,
@@ -53,19 +71,19 @@ export async function changePassword(newPassword: string) {
 
 export async function logout() {
     const cookieStore = await cookies()
-    cookieStore.delete('userId')
-    cookieStore.delete('userRole')
+    cookieStore.delete('session')
+    cookieStore.delete('userId') // cleanup
+    cookieStore.delete('userRole') // cleanup
     return { success: true }
 }
 
 export async function getCurrentUser() {
-    const cookieStore = await cookies()
-    const userId = cookieStore.get('userId')?.value
+    const session = await getSession()
+    if (!session || !session.user?.id) return null
 
-    if (!userId) return null
-
+    // Fetch fresh user data from DB to ensure role/status is up to date
     const user = await prisma.user.findUnique({
-        where: { id: userId },
+        where: { id: session.user.id },
         select: { id: true, email: true, name: true, role: true, xp: true, level: true, streak: true, privacyAccepted: true },
     })
 
