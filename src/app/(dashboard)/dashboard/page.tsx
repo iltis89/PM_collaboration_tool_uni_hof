@@ -6,7 +6,7 @@ import { getDashboardData } from '@/app/actions';
 export default async function Dashboard() {
     const data = await getDashboardData();
     const user = data?.user;
-    const nextLecture = data?.nextLecture;
+    const upcomingLectures = data?.upcomingLectures || [];
     const latestNews = data?.latestNews;
 
     if (!user) {
@@ -86,18 +86,25 @@ export default async function Dashboard() {
                     </div>
                 </Card>
 
-                <Card title="Nächste Vorlesung">
-                    {nextLecture ? (
-                        <div style={{ padding: '12px 0' }}>
-                            <div style={{ fontSize: '0.9rem', color: 'var(--accent)', marginBottom: '8px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>schedule</span>
-                                {new Date(nextLecture.startTime).toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' })} {new Date(nextLecture.startTime).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' })} Uhr (MEZ)
-                            </div>
-                            <div style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '8px' }}>{nextLecture.title}</div>
-                            <div style={{ color: 'var(--foreground-muted)', fontSize: '0.9rem' }}>
-                                {nextLecture.room && <span>{nextLecture.room} &middot; </span>}
-                                {nextLecture.professor}
-                            </div>
+                <Card title="Geplante Vorlesungen">
+                    {upcomingLectures.length > 0 ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxHeight: '400px', overflowY: 'auto', paddingRight: '8px' }}>
+                            {upcomingLectures.map((lecture: any, index: number) => (
+                                <div key={lecture.id} style={{
+                                    padding: '12px 0',
+                                    borderBottom: index < upcomingLectures.length - 1 ? '1px solid var(--border)' : 'none'
+                                }}>
+                                    <div style={{ fontSize: '0.85rem', color: 'var(--accent)', marginBottom: '4px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <span className="material-symbols-outlined" style={{ fontSize: '0.9rem' }}>schedule</span>
+                                        {new Date(lecture.startTime).toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' })} {new Date(lecture.startTime).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' })} Uhr (MEZ)
+                                    </div>
+                                    <div style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '4px' }}>{lecture.title}</div>
+                                    <div style={{ color: 'var(--foreground-muted)', fontSize: '0.8rem' }}>
+                                        {lecture.room && <span>{lecture.room} &middot; </span>}
+                                        {lecture.professor}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     ) : (
                         <div style={{ padding: '24px 0', textAlign: 'center', color: 'var(--foreground-muted)' }}>

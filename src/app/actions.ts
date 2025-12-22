@@ -574,8 +574,8 @@ export async function getDashboardData() {
     const user = await getCurrentUser()
     if (!user) return null
 
-    // Get next upcoming lecture
-    const nextLecture = await prisma.lecture.findFirst({
+    // Get all upcoming lectures
+    const upcomingLectures = await prisma.lecture.findMany({
         where: {
             startTime: {
                 gte: new Date()
@@ -593,7 +593,7 @@ export async function getDashboardData() {
 
     return {
         user,
-        nextLecture,
+        upcomingLectures,
         latestNews
     }
 }
