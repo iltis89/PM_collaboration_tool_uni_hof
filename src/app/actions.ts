@@ -437,6 +437,22 @@ export async function deleteMessage(messageId: string) {
     return prisma.message.delete({ where: { id: messageId } })
 }
 
+export async function updateMessage(messageId: string, content: string) {
+    const user = await requireAuth()
+
+    const message = await prisma.message.findUnique({ where: { id: messageId } })
+    if (!message) throw new Error('Nachricht nicht gefunden')
+
+    if (message.authorId !== user.id && user.role !== 'ADMIN') {
+        throw new Error('Keine Berechtigung')
+    }
+
+    return prisma.message.update({
+        where: { id: messageId },
+        data: { content }
+    })
+}
+
 export async function getCourseMessages() {
     return prisma.courseChatMessage.findMany({
         include: {
@@ -456,6 +472,35 @@ export async function sendCourseMessage(content: string) {
             authorId: user.id
         }
     })
+}
+
+export async function updateCourseMessage(messageId: string, content: string) {
+    const user = await requireAuth()
+
+    const message = await prisma.courseChatMessage.findUnique({ where: { id: messageId } })
+    if (!message) throw new Error('Nachricht nicht gefunden')
+
+    if (message.authorId !== user.id && user.role !== 'ADMIN') {
+        throw new Error('Keine Berechtigung')
+    }
+
+    return prisma.courseChatMessage.update({
+        where: { id: messageId },
+        data: { content }
+    })
+}
+
+export async function deleteCourseMessage(messageId: string) {
+    const user = await requireAuth()
+
+    const message = await prisma.courseChatMessage.findUnique({ where: { id: messageId } })
+    if (!message) throw new Error('Nachricht nicht gefunden')
+
+    if (message.authorId !== user.id && user.role !== 'ADMIN') {
+        throw new Error('Keine Berechtigung')
+    }
+
+    return prisma.courseChatMessage.delete({ where: { id: messageId } })
 }
 
 // ============== AUDIO LEARNING ==============

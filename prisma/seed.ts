@@ -27,9 +27,26 @@ async function main() {
     // Create Students
     const studentPassword = await hash('Start!2025', 12)
     const students = [
-        { name: 'Kiri Wolf', email: 'kwolf@hof-university.de' },
+        { name: 'Jakob Ahlgrimm', email: 'ahlgrimmjakob@gmail.com' },
+        { name: 'Erik Bär', email: 'erik.baer@hof-university.de' },
         { name: 'Vijona Gashi', email: 'vijona.gashi@hof-university.de' },
-        { name: 'Konstantin', email: 'kwehr@hof-university.de' },
+        { name: 'Konstantin Wehr', email: 'kwehr@hof-university.de' },
+        { name: 'Nico Weigel', email: 'nweigel@hof-university.de' },
+        { name: 'Christian Fritz', email: 'cfritz@hof-university.de' },
+        { name: 'Nadine Bauer', email: 'nbauer@hof-university.de' },
+        { name: 'Raissa Kempfer', email: 'raissa.kempfer@hof-university.de' },
+        { name: 'Christian Martin', email: 'cmartin2@hof-university.de' },
+        { name: 'Metecan Durak', email: 'metecan.durak@hof-university.de' },
+        { name: 'Maryam Pazouki', email: 'Maryam.pazouki@hof-university.de' },
+        { name: 'Lavinia Kolofik', email: 'lavinia.kolofik@hof-university.de' },
+        { name: 'Niklas Lauterbach', email: 'nlauterbach@hof-university.de' },
+        { name: 'Kiri Wolf', email: 'kwolf@hof-university.de' },
+        { name: 'Dominika Zajaczkowska', email: 'Dominika.zajaczkowska@hof-university.de' },
+        { name: 'Kasra Nobari', email: 'kasra.nobari@hof-university.de' },
+        { name: 'Nils Haupt', email: 'nhaupt2@hof-university.de' },
+        { name: 'Haktan Kanpolat', email: 'kanpolathaktan@gmail.com' },
+        { name: 'Patrick Reichel', email: 'patrick.reichel.2@Hof-university.de' },
+        { name: 'Felix Rittmann', email: 'felix.rittmann@hof-university.de' },
         { name: 'Ludwig Stangenberg', email: 'ludwig.stangenberg@hof-university.de' },
     ]
 
