@@ -29,7 +29,7 @@ export async function POST(request: Request): Promise<NextResponse> {
             },
             onUploadCompleted: async ({ blob, tokenPayload }) => {
                 // Optional: Run server-side code after upload
-                console.log('blob uploaded', blob.url);
+                // Optional: Run server-side code after upload
             },
         });
 

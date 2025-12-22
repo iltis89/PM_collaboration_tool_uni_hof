@@ -13,7 +13,7 @@ interface SessionPayload {
         role: string;
     };
     expires: Date;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export async function encrypt(payload: SessionPayload) {
