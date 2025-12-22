@@ -29,6 +29,7 @@ export default function Materials() {
     const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
     const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
         const loadData = async () => {
@@ -41,6 +42,17 @@ export default function Materials() {
             setIsLoading(false);
         };
         loadData();
+    }, []);
+
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        };
     }, []);
 
     const filteredMaterials = selectedTopicId
@@ -98,12 +110,30 @@ export default function Materials() {
                 </aside>
 
                 {/* Right Panel - PDF Viewer */}
-                <main className={styles.viewerPanel}>
+                <main className={styles.viewerPanel} id="pdf-viewer-panel">
                     {selectedMaterial ? (
                         <>
                             <header className={styles.viewerHeader}>
                                 <h2>{selectedMaterial.title}</h2>
                                 <div className={styles.viewerActions}>
+                                    <button
+                                        className={styles.fullscreenBtn}
+                                        onClick={() => {
+                                            const element = document.getElementById('pdf-viewer-panel');
+                                            if (!document.fullscreenElement) {
+                                                element?.requestFullscreen().catch(err => {
+                                                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                                                });
+                                            } else {
+                                                document.exitFullscreen();
+                                            }
+                                        }}
+                                        title={isFullscreen ? "Vollbildmodus beenden" : "Vollbildmodus aktivieren"}
+                                    >
+                                        <span className="material-symbols-outlined">
+                                            {isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
+                                        </span>
+                                    </button>
                                     {selectedMaterial.fileUrl && (
                                         <a
                                             href={selectedMaterial.fileUrl}
