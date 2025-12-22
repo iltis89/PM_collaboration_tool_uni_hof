@@ -44,6 +44,26 @@ model Material {
   size        String?
   uploadedBy  String?
   uploadedAt  DateTime @default(now())
+  topicId     String?
+  topic       CurriculumTopic? @relation(fields: [topicId], references: [id])
+}
+
+model CurriculumTopic {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  order       Int        @unique
+  date        DateTime?
+  status      TopicStatus @default(UPCOMING)
+  materials   Material[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+enum TopicStatus {
+  UPCOMING
+  IN_PROGRESS
+  COMPLETED
 }
 
 model News {

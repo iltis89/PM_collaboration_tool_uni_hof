@@ -136,15 +136,40 @@ export async function deleteUser(id: string) {
 export async function getMaterials() {
     return prisma.material.findMany({
         orderBy: { uploadedAt: 'desc' },
+        include: { topic: true }
     })
 }
 
-export async function createMaterial(data: { title: string; description?: string; fileUrl?: string; size?: string }) {
+export async function createMaterial(data: { title: string; description?: string; fileUrl?: string; size?: string; topicId?: string }) {
     return prisma.material.create({ data })
 }
 
 export async function deleteMaterial(id: string) {
     return prisma.material.delete({ where: { id } })
+}
+
+// ============== CURRICULUM ==============
+
+export async function getCurriculumTopics() {
+    return prisma.curriculumTopic.findMany({
+        orderBy: { order: 'asc' },
+        include: { materials: true }
+    })
+}
+
+export async function createCurriculumTopic(data: { title: string; description?: string; order: number; date?: Date; status?: 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED' }) {
+    return prisma.curriculumTopic.create({ data })
+}
+
+export async function updateCurriculumTopic(id: string, data: { title?: string; description?: string; order?: number; date?: Date; status?: 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED' }) {
+    return prisma.curriculumTopic.update({
+        where: { id },
+        data
+    })
+}
+
+export async function deleteCurriculumTopic(id: string) {
+    return prisma.curriculumTopic.delete({ where: { id } })
 }
 
 // ============== NEWS ==============

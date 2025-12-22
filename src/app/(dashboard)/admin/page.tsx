@@ -66,10 +66,19 @@ interface Lecture {
     endTime: Date;
 }
 
+interface CurriculumTopic {
+    id: string;
+    title: string;
+    description: string | null;
+    order: number;
+    date: Date | null;
+    status: 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED';
+}
+
 export default function AdminPage() {
     const router = useRouter();
     const [stats, setStats] = useState<AdminStats | null>(null);
-    const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'materials' | 'news' | 'audio' | 'lectures'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'materials' | 'news' | 'audio' | 'lectures' | 'curriculum'>('overview');
     const [isLoading, setIsLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -79,10 +88,11 @@ export default function AdminPage() {
     const [news, setNews] = useState<News[]>([]);
     const [audioSnippets, setAudioSnippets] = useState<AudioSnippet[]>([]);
     const [lectures, setLectures] = useState<Lecture[]>([]);
+    const [curriculumTopics, setCurriculumTopics] = useState<CurriculumTopic[]>([]);
 
     // Form states
     const [newUser, setNewUser] = useState({ email: '', name: '', password: '' });
-    const [newMaterial, setNewMaterial] = useState({ title: '', description: '', file: null as File | null });
+    const [newMaterial, setNewMaterial] = useState({ title: '', description: '', topicId: '', file: null as File | null });
     const [newNews, setNewNews] = useState({ title: '', content: '' });
     const [newAudio, setNewAudio] = useState({ title: '', description: '', transcript: '', file: null as File | null });
     const [newLecture, setNewLecture] = useState({
@@ -93,6 +103,13 @@ export default function AdminPage() {
         date: new Date().toISOString().split('T')[0],
         startTime: '10:00',
         endTime: '11:30'
+    });
+    const [newTopic, setNewTopic] = useState({
+        title: '',
+        description: '',
+        order: 1,
+        date: new Date().toISOString().split('T')[0],
+        status: 'UPCOMING' as const
     });
     const [isUploading, setIsUploading] = useState(false);
 
@@ -114,7 +131,7 @@ export default function AdminPage() {
 
         const loadData = async () => {
             // Dynamically import actions
-            const { getAdminStats, getUsers, getMaterials, getNews, getAudioSnippets, getLectures } = await import('@/app/actions');
+            const { getAdminStats, getUsers, getMaterials, getNews, getAudioSnippets, getLectures, getCurriculumTopics } = await import('@/app/actions');
 
             if (activeTab === 'overview') {
                 getAdminStats().then(setStats);
@@ -122,12 +139,15 @@ export default function AdminPage() {
                 getUsers().then(data => setUsers(data as User[]));
             } else if (activeTab === 'materials') {
                 getMaterials().then(data => setMaterials(data as Material[]));
+                getCurriculumTopics().then(data => setCurriculumTopics(data as CurriculumTopic[]));
             } else if (activeTab === 'news') {
                 getNews().then(data => setNews(data as News[]));
             } else if (activeTab === 'audio') {
                 getAudioSnippets().then(data => setAudioSnippets(data as AudioSnippet[]));
             } else if (activeTab === 'lectures') {
                 getLectures().then(data => setLectures(data as Lecture[]));
+            } else if (activeTab === 'curriculum') {
+                getCurriculumTopics().then(data => setCurriculumTopics(data as CurriculumTopic[]));
             }
         };
 
@@ -180,6 +200,15 @@ export default function AdminPage() {
         } catch (e) { alert('Fehler beim Löschen'); }
     };
 
+    const handleDeleteTopic = async (id: string) => {
+        if (!confirm('Dieses Thema wirklich löschen?')) return;
+        const { deleteCurriculumTopic } = await import('@/app/actions');
+        try {
+            await deleteCurriculumTopic(id);
+            setCurriculumTopics(curriculumTopics.filter(t => t.id !== id));
+        } catch (e) { alert('Fehler beim Löschen'); }
+    };
+
     if (isLoading) return <div style={{ padding: '2rem', color: 'var(--foreground-muted)' }}>Lädt...</div>;
     if (!isAdmin) return null;
 
@@ -191,7 +220,7 @@ export default function AdminPage() {
             </header>
 
             <div className={styles.tabs}>
-                {['overview', 'users', 'materials', 'news', 'audio', 'lectures'].map((tab) => (
+                {['overview', 'users', 'materials', 'news', 'audio', 'lectures', 'curriculum'].map((tab) => (
                     <button
                         key={tab}
                         className={`${styles.tab} ${activeTab === tab ? styles.active : ''}`}
@@ -204,6 +233,7 @@ export default function AdminPage() {
                         {tab === 'news' && 'Neuigkeiten'}
                         {tab === 'audio' && 'Audio'}
                         {tab === 'lectures' && 'Vorlesungen'}
+                        {tab === 'curriculum' && 'Lehrplan'}
                     </button>
                 ))}
             </div>
@@ -325,10 +355,11 @@ export default function AdminPage() {
                                     await createMaterial({
                                         title: newMaterial.title,
                                         description: newMaterial.description,
-                                        fileUrl: blob.url
+                                        fileUrl: blob.url,
+                                        topicId: newMaterial.topicId || undefined
                                     });
                                     alert('Material hinzugefügt');
-                                    setNewMaterial({ title: '', description: '', file: null });
+                                    setNewMaterial({ title: '', description: '', topicId: '', file: null });
                                     getMaterials().then(data => setMaterials(data as Material[]));
                                 } catch (err: any) {
                                     console.error(err);
@@ -339,6 +370,19 @@ export default function AdminPage() {
                             }}>
                                 <input type="text" placeholder="Titel" value={newMaterial.title} onChange={e => setNewMaterial({ ...newMaterial, title: e.target.value })} className={styles.input} />
                                 <input type="text" placeholder="Beschreibung" value={newMaterial.description} onChange={e => setNewMaterial({ ...newMaterial, description: e.target.value })} className={styles.input} />
+                                <div style={{ marginBottom: '8px' }}>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>Lehrplan-Thema (optional)</label>
+                                    <select
+                                        value={newMaterial.topicId}
+                                        onChange={e => setNewMaterial({ ...newMaterial, topicId: e.target.value })}
+                                        className={styles.input}
+                                    >
+                                        <option value="">Kein Thema zugeordnet</option>
+                                        {curriculumTopics.map(t => (
+                                            <option key={t.id} value={t.id}>{t.order}. {t.title}</option>
+                                        ))}
+                                    </select>
+                                </div>
                                 <div style={{ marginBottom: '8px' }}>
                                     <label style={{ display: 'block', marginBottom: '4px', fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>Datei auswählen</label>
                                     <input
@@ -543,6 +587,95 @@ export default function AdminPage() {
                         </Card>
                     </div>
                 )}
+
+                {/* CURRICULUM TAB */}
+                {activeTab === 'curriculum' && (
+                    <div style={{ display: 'grid', gap: '24px' }}>
+                        <Card title="Thema zum Lehrplan hinzufügen">
+                            <form className={styles.form} onSubmit={async (e) => {
+                                e.preventDefault();
+                                if (!newTopic.title) return;
+
+                                const { createCurriculumTopic, getCurriculumTopics } = await import('@/app/actions');
+                                await createCurriculumTopic({
+                                    title: newTopic.title,
+                                    description: newTopic.description,
+                                    order: Number(newTopic.order),
+                                    date: newTopic.date ? new Date(newTopic.date) : undefined,
+                                    status: newTopic.status
+                                });
+                                alert('Thema hinzugefügt!');
+                                setNewTopic({
+                                    title: '',
+                                    description: '',
+                                    order: curriculumTopics.length + 2,
+                                    date: new Date().toISOString().split('T')[0],
+                                    status: 'UPCOMING'
+                                });
+                                getCurriculumTopics().then(data => setCurriculumTopics(data as CurriculumTopic[]));
+                            }}>
+                                <input type="text" placeholder="Titel (z.B. Projektplanung)" value={newTopic.title} onChange={e => setNewTopic({ ...newTopic, title: e.target.value })} className={styles.input} required />
+                                <textarea placeholder="Beschreibung" value={newTopic.description} onChange={e => setNewTopic({ ...newTopic, description: e.target.value })} className={styles.textarea} rows={2} />
+                                <div style={{ display: 'flex', gap: '12px' }}>
+                                    <div style={{ flex: 1 }}>
+                                        <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', opacity: 0.7 }}>Reihenfolge</label>
+                                        <input type="number" value={newTopic.order} onChange={e => setNewTopic({ ...newTopic, order: parseInt(e.target.value) })} className={styles.input} required />
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', opacity: 0.7 }}>Datum</label>
+                                        <input type="date" value={newTopic.date} onChange={e => setNewTopic({ ...newTopic, date: e.target.value })} className={styles.input} />
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', opacity: 0.7 }}>Status</label>
+                                        <select value={newTopic.status} onChange={e => setNewTopic({ ...newTopic, status: e.target.value as any })} className={styles.input}>
+                                            <option value="UPCOMING">Anstehend</option>
+                                            <option value="IN_PROGRESS">In Bearbeitung</option>
+                                            <option value="COMPLETED">Abgeschlossen</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" className={styles.submitBtn}>Thema erstellen</button>
+                            </form>
+                        </Card>
+
+                        <Card title="Semester-Zeitstrahl">
+                            {curriculumTopics.length === 0 && <p style={{ color: 'var(--foreground-muted)' }}>Keine Themen definiert.</p>}
+                            {curriculumTopics.sort((a, b) => a.order - b.order).map(t => (
+                                <div key={t.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', borderBottom: '1px solid var(--border)', alignItems: 'center' }}>
+                                    <div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <span style={{
+                                                fontSize: '0.75rem',
+                                                background: 'var(--accent)',
+                                                color: 'white',
+                                                padding: '2px 6px',
+                                                borderRadius: '4px',
+                                                fontWeight: 700
+                                            }}>{t.order}</span>
+                                            <div style={{ fontWeight: 600, fontSize: '1.1rem' }}>{t.title}</div>
+                                            <span style={{
+                                                fontSize: '0.7rem',
+                                                padding: '2px 8px',
+                                                borderRadius: '12px',
+                                                background: t.status === 'COMPLETED' ? 'rgba(76, 175, 80, 0.1)' : t.status === 'IN_PROGRESS' ? 'rgba(255, 152, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)',
+                                                color: t.status === 'COMPLETED' ? '#4CAF50' : t.status === 'IN_PROGRESS' ? '#FF9800' : 'var(--foreground-muted)',
+                                                border: `1px solid ${t.status === 'COMPLETED' ? 'rgba(76, 175, 80, 0.3)' : t.status === 'IN_PROGRESS' ? 'rgba(255, 152, 0, 0.3)' : 'rgba(255, 255, 255, 0.1)'}`
+                                            }}>
+                                                {t.status === 'COMPLETED' ? 'Abgeschlossen' : t.status === 'IN_PROGRESS' ? 'Laufend' : 'Geplant'}
+                                            </span>
+                                        </div>
+                                        {t.description && <div style={{ fontSize: '0.9rem', color: 'var(--foreground-muted)', marginTop: '4px' }}>{t.description}</div>}
+                                        {t.date && <div style={{ fontSize: '0.8rem', opacity: 0.5, marginTop: '4px' }}>{new Date(t.date).toLocaleDateString()}</div>}
+                                    </div>
+                                    <button onClick={() => handleDeleteTopic(t.id)} style={{ color: 'var(--error)', background: 'none', border: 'none', cursor: 'pointer' }}>
+                                        <span className="material-symbols-outlined">delete</span>
+                                    </button>
+                                </div>
+                            ))}
+                        </Card>
+                    </div>
+                )}
+
             </div>
         </div>
     );

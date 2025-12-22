@@ -1,9 +1,16 @@
+.outerContainer {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
+    margin: -2rem;
+    overflow: hidden;
+}
+
 .container {
     display: grid;
     grid-template-columns: 340px 1fr;
-    height: calc(100vh - 80px);
+    flex: 1;
     gap: 0;
-    margin: -2rem;
     overflow: hidden;
 }
 
