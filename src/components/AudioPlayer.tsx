@@ -8,6 +8,7 @@ interface AudioSnippet {
     title: string;
     description?: string | null;
     url: string;
+    transcript?: string | null;
 }
 
 export default function AudioPlayer({ snippet }: { snippet: AudioSnippet }) {
@@ -17,6 +18,7 @@ export default function AudioPlayer({ snippet }: { snippet: AudioSnippet }) {
     const [duration, setDuration] = useState(0);
     const [playbackRate, setPlaybackRate] = useState(1);
     const [volume, setVolume] = useState(1);
+    const [showTranscript, setShowTranscript] = useState(false);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -130,6 +132,41 @@ export default function AudioPlayer({ snippet }: { snippet: AudioSnippet }) {
                     </button>
 
                 </div>
+
+                {snippet.transcript && (
+                    <div style={{ marginTop: '24px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
+                        <button
+                            onClick={() => setShowTranscript(!showTranscript)}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                color: 'var(--accent)',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: 0,
+                                marginBottom: '12px'
+                            }}
+                        >
+                            <span className="material-symbols-outlined">{showTranscript ? 'expand_less' : 'expand_more'}</span>
+                            {showTranscript ? 'Transkript verbergen' : 'Transkript anzeigen'}
+                        </button>
+
+                        {showTranscript && (
+                            <div className="animate-fade-in" style={{
+                                background: 'var(--surface-highlight)',
+                                padding: '16px',
+                                borderRadius: '8px',
+                                lineHeight: 1.6,
+                                fontSize: '0.95rem',
+                                color: 'var(--foreground-muted)'
+                            }}>
+                                {snippet.transcript}
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

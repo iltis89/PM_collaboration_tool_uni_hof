@@ -263,6 +263,25 @@ export async function createThread(data: { title: string; content: string }) {
     })
 }
 
+export async function updateThread(threadId: string, data: { title: string; content: string }) {
+    const user = await requireAuth()
+
+    const thread = await prisma.thread.findUnique({ where: { id: threadId } })
+    if (!thread) throw new Error('Thread nicht gefunden')
+
+    if (thread.authorId !== user.id && user.role !== 'ADMIN') {
+        throw new Error('Keine Berechtigung')
+    }
+
+    return prisma.thread.update({
+        where: { id: threadId },
+        data: {
+            title: data.title,
+            content: data.content,
+        }
+    })
+}
+
 export async function createMessage(threadId: string, content: string) {
     const user = await requireAuth()
 
@@ -284,12 +303,19 @@ export async function createMessage(threadId: string, content: string) {
 // ============== EXAMS ==============
 
 export async function getExams() {
+    const user = await getCurrentUser()
+
     return prisma.exam.findMany({
         orderBy: { createdAt: 'desc' },
         include: {
             _count: {
                 select: { questions: true }
-            }
+            },
+            results: user ? {
+                where: { userId: user.id },
+                orderBy: { score: 'desc' },
+                take: 1
+            } : false
         }
     })
 }
@@ -373,6 +399,40 @@ export async function deleteThread(threadId: string) {
     return prisma.thread.delete({ where: { id: threadId } })
 }
 
+export async function deleteMessage(messageId: string) {
+    const user = await requireAuth()
+
+    const message = await prisma.message.findUnique({ where: { id: messageId } })
+    if (!message) throw new Error('Nachricht nicht gefunden')
+
+    if (message.authorId !== user.id && user.role !== 'ADMIN') {
+        throw new Error('Keine Berechtigung')
+    }
+
+    return prisma.message.delete({ where: { id: messageId } })
+}
+
+export async function getCourseMessages() {
+    return prisma.courseChatMessage.findMany({
+        include: {
+            author: { select: { id: true, name: true } }
+        },
+        orderBy: { createdAt: 'asc' },
+        take: 100 // Limit to last 100 messages for performance
+    })
+}
+
+export async function sendCourseMessage(content: string) {
+    const user = await requireAuth()
+
+    return prisma.courseChatMessage.create({
+        data: {
+            content,
+            authorId: user.id
+        }
+    })
+}
+
 // ============== AUDIO LEARNING ==============
 
 export async function getAudioSnippets() {
@@ -381,7 +441,7 @@ export async function getAudioSnippets() {
     })
 }
 
-export async function createAudioSnippet(data: { title: string; description?: string; url: string; duration?: number }) {
+export async function createAudioSnippet(data: { title: string; description?: string; url: string; duration?: number; transcript?: string }) {
     // Optional: requireAuth() check if strict admin enforcement is needed here
     // const user = await requireAuth(); 
     // if (user.role !== 'ADMIN') throw new Error('Unauthorized');

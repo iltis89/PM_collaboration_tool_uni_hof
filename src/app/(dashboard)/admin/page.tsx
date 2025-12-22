@@ -84,7 +84,7 @@ export default function AdminPage() {
     const [newUser, setNewUser] = useState({ email: '', name: '', password: '' });
     const [newMaterial, setNewMaterial] = useState({ title: '', description: '', file: null as File | null });
     const [newNews, setNewNews] = useState({ title: '', content: '' });
-    const [newAudio, setNewAudio] = useState({ title: '', description: '', file: null as File | null });
+    const [newAudio, setNewAudio] = useState({ title: '', description: '', transcript: '', file: null as File | null });
     const [newLecture, setNewLecture] = useState({
         title: '',
         description: '',
@@ -428,10 +428,11 @@ export default function AdminPage() {
                                     await createAudioSnippet({
                                         title: newAudio.title,
                                         description: newAudio.description,
+                                        transcript: newAudio.transcript,
                                         url: blob.url
                                     });
                                     alert('Audio hinzugefügt');
-                                    setNewAudio({ title: '', description: '', file: null });
+                                    setNewAudio({ title: '', description: '', transcript: '', file: null });
                                     getAudioSnippets().then(data => setAudioSnippets(data as AudioSnippet[]));
                                 } catch (err: any) {
                                     console.error(err);
@@ -442,6 +443,13 @@ export default function AdminPage() {
                             }}>
                                 <input type="text" placeholder="Titel" value={newAudio.title} onChange={e => setNewAudio({ ...newAudio, title: e.target.value })} className={styles.input} />
                                 <input type="text" placeholder="Beschreibung" value={newAudio.description} onChange={e => setNewAudio({ ...newAudio, description: e.target.value })} className={styles.input} />
+                                <textarea
+                                    placeholder="Transkript (Optional)"
+                                    value={newAudio.transcript}
+                                    onChange={e => setNewAudio({ ...newAudio, transcript: e.target.value })}
+                                    className={styles.textarea}
+                                    style={{ minHeight: '100px' }}
+                                />
                                 <div style={{ marginBottom: '8px' }}>
                                     <label style={{ display: 'block', marginBottom: '4px', fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>Audio-Datei auswählen (MP3, WAV)</label>
                                     <input
@@ -520,7 +528,7 @@ export default function AdminPage() {
                                     <div>
                                         <div style={{ fontWeight: 600, fontSize: '1.1rem' }}>{l.title}</div>
                                         <div style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '4px' }}>
-                                            {new Date(l.startTime).toLocaleDateString()} &middot; {new Date(l.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            {new Date(l.startTime).toLocaleDateString('de-DE')} &middot; {new Date(l.startTime).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
                                         </div>
                                         <div style={{ fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>
                                             {l.professor && <span>{l.professor}</span>}

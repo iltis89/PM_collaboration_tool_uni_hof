@@ -11,6 +11,7 @@ interface ExamListItem {
     description: string;
     duration: number;
     _count?: { questions: number };
+    results?: { score: number; passed: boolean }[];
 }
 
 export default function ExamPrep() {
@@ -58,6 +59,32 @@ export default function ExamPrep() {
                             <div style={{ color: 'var(--foreground-muted)', fontSize: '0.9rem' }}>
                                 {exam._count?.questions || 0} Fragen
                             </div>
+
+                            {/* Progress Bar */}
+                            <div style={{ flex: 1, margin: '0 24px' }}>
+                                {exam.results && exam.results.length > 0 ? (
+                                    <div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--foreground-muted)' }}>
+                                            <span>Dein Bestwert</span>
+                                            <span style={{ color: exam.results[0].passed ? 'var(--accent)' : 'white' }}>{exam.results[0].score}%</span>
+                                        </div>
+                                        <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                                            <div style={{
+                                                height: '100%',
+                                                width: `${exam.results[0].score}%`,
+                                                background: exam.results[0].passed ? 'var(--accent)' : 'var(--primary)',
+                                                borderRadius: '3px',
+                                                transition: 'width 1s ease-out'
+                                            }} />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div style={{ fontSize: '0.8rem', color: 'var(--foreground-muted)', fontStyle: 'italic' }}>
+                                        Noch nicht absolviert
+                                    </div>
+                                )}
+                            </div>
+
                             <button
                                 onClick={() => router.push(`/exam-prep/${exam.id}`)}
                                 style={{
@@ -77,6 +104,6 @@ export default function ExamPrep() {
                     </Card>
                 ))}
             </div>
-        </div>
+        </div >
     );
 }

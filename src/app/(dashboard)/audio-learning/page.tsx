@@ -9,6 +9,7 @@ interface AudioSnippet {
     title: string;
     description?: string | null;
     url: string;
+    transcript?: string | null;
     uploadedAt: Date;
 }
 
