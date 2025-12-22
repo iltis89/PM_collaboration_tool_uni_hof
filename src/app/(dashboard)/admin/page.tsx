@@ -528,7 +528,7 @@ export default function AdminPage() {
                                     <div>
                                         <div style={{ fontWeight: 600, fontSize: '1.1rem' }}>{l.title}</div>
                                         <div style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '4px' }}>
-                                            {new Date(l.startTime).toLocaleDateString('de-DE')} &middot; {new Date(l.startTime).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+                                            {new Date(l.startTime).toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' })} &middot; {new Date(l.startTime).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' })}
                                         </div>
                                         <div style={{ fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>
                                             {l.professor && <span>{l.professor}</span>}

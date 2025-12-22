@@ -91,7 +91,7 @@ export default async function Dashboard() {
                         <div style={{ padding: '12px 0' }}>
                             <div style={{ fontSize: '0.9rem', color: 'var(--accent)', marginBottom: '8px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>schedule</span>
-                                {new Date(nextLecture.startTime).toLocaleDateString('de-DE')} {new Date(nextLecture.startTime).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr (MEZ)
+                                {new Date(nextLecture.startTime).toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' })} {new Date(nextLecture.startTime).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' })} Uhr (MEZ)
                             </div>
                             <div style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '8px' }}>{nextLecture.title}</div>
                             <div style={{ color: 'var(--foreground-muted)', fontSize: '0.9rem' }}>
