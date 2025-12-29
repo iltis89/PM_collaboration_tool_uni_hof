@@ -74,12 +74,11 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
                     <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>1. Verantwortliche Stelle</h3>
                     <p style={{ marginBottom: '16px' }}>
                         Verantwortlich für die Datenverarbeitung auf dieser Plattform ist:<br /><br />
-                        <strong>Hochschule Hof</strong><br />
-                        Alfons-Goppel-Platz 1<br />
-                        95028 Hof<br />
+                        <strong>Marcus Görner</strong><br />
+                        an der Beermahd 12<br />
+                        82229 Hechendorf<br />
                         Deutschland<br />
-                        E-Mail: datenschutz@hof-university.de<br />
-                        Vertreten durch den Präsidenten.
+                        E-Mail: marcus.goener@requestchange.eu<br />
                     </p>
 
                     <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>2. Art der verarbeiteten Daten</h3>
@@ -95,11 +94,11 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
 
                     <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>3. Zwecke und Rechtsgrundlagen der Verarbeitung</h3>
                     <p style={{ marginBottom: '16px' }}>
-                        Wir verarbeiten Ihre Daten zu folgenden Zwecken und auf folgenden Rechtsgrundlagen:
+                        Dies ist ein privates Projekt im Rahmen einer Gastdozentur und kein offizielles Angebot der Hochschule Hof. Wir verarbeiten Ihre Daten zu folgenden Zwecken:
                     </p>
                     <ul style={{ marginBottom: '16px', paddingLeft: '20px' }}>
-                        <li><strong>Durchführung des Lehrbetriebs:</strong> Zur Bereitstellung der Lernmaterialien und Durchführung von Prüfungen (Art. 6 Abs. 1 lit. e DSGVO i.V.m. Bayerisches Hochschulgesetz).</li>
-                        <li><strong>Leistungsbewertung:</strong> Zur Dokumentation Ihres Studienfortschritts (Art. 6 Abs. 1 lit. c DSGVO).</li>
+                        <li><strong>Durchführung des Lehrbetriebs:</strong> Zur Bereitstellung der Lernmaterialien und Durchführung von Prüfungen.</li>
+                        <li><strong>Leistungsbewertung:</strong> Zur Dokumentation Ihres Studienfortschritts.</li>
                         <li><strong>Sicherheit der Plattform:</strong> Zur Verhinderung von Missbrauch und Sicherstellung der Systemstabilität (Art. 6 Abs. 1 lit. f DSGVO).</li>
                         <li><strong>Einwilligung:</strong> Für optionale Funktionen wie Profilbilder oder freiwillige Angaben (Art. 6 Abs. 1 lit. a DSGVO).</li>
                     </ul>
@@ -110,7 +109,7 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
                     </p>
                     <ul style={{ marginBottom: '16px', paddingLeft: '20px' }}>
                         <li><strong>Dozenten/Prüfer:</strong> Erhalten Zugriff auf leistungsrelevante Daten.</li>
-                        <li><strong>IT-Dienstleister:</strong> Hoster (Vercel, Neon DB) verarbeiten Daten in unserem Auftrag auf Basis von Auftragsverarbeitungsverträgen (AVV) gemäß Art. 28 DSGVO.</li>
+                        <li><strong>IT-Dienstleister:</strong> Hoster (Vercel, Neon DB) verarbeiten Daten in unserem Auftrag. Die Datenverarbeitung erfolgt ausschließlich auf Servern innerhalb der Europäischen Union (Region: Frankfurt am Main), sodass kein Drittlandtransfer stattfindet.</li>
                         <li><strong>Gesetzliche Verpflichtung:</strong> Behörden oder Gerichte bei vorliegender gesetzlicher Verpflichtung.</li>
                     </ul>
 
@@ -137,10 +136,26 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
                         Sie haben zudem das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren (Bayerisches Landesamt für Datenschutzaufsicht).
                     </p>
 
-                    <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>7. Kontakt zum Datenschutzbeauftragten</h3>
+                    <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>7. Kontakt</h3>
                     <p style={{ marginBottom: '16px' }}>
-                        Unseren behördlichen Datenschutzbeauftragten erreichen Sie unter:<br />
-                        datenschutz@hof-university.de
+                        Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br />
+                        marcus.goener@requestchange.eu
+                    </p>
+
+                    <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>8. Nutzungsbedingungen & Haftungsausschluss</h3>
+                    <p style={{ marginBottom: '16px' }}>
+                        <strong>Haftungsausschluss:</strong> Diese Anwendung ist ein Prototyp und wird ausschließlich zu Demonstrationszwecken im Rahmen der Lehre bereitgestellt ("As-is"). Es wird keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit übernommen. Jegliche Haftung für Schäden, die direkt oder indirekt aus der Nutzung entstehen (insbesondere Datenverlust), wird ausgeschlossen, soweit dies gesetzlich zulässig ist.
+                    </p>
+
+                    <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>Impressum</h3>
+                    <p style={{ marginBottom: '16px' }}>
+                        Angaben gemäß § 5 DDG:<br /><br />
+                        Marcus Görner<br />
+                        an der Beermahd 12<br />
+                        82229 Hechendorf<br />
+                        <br />
+                        Kontakt:<br />
+                        E-Mail: marcus.goener@requestchange.eu
                     </p>
                 </div>
 

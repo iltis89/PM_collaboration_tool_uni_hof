@@ -3,22 +3,22 @@
 **Stand: 15. Dezember 2025**
 
 ## 1. Einleitung
-Diese Datenschutzerklärung klärt Nutzer über die Art, den Umfang und Zwecke der Erhebung und Verwendung personenbezogener Daten innerhalb dieser Online-Lernplattform ("Plattform") auf. Die Plattform wird im Rahmen einer Lehrveranstaltung der Hochschule Hof (Studiengang Mobility Design) betrieben.
+Diese Datenschutzerklärung klärt Nutzer über die Art, den Umfang und Zwecke der Erhebung und Verwendung personenbezogener Daten innerhalb dieser Online-Lernplattform ("Plattform") auf. Dies ist ein privates Projekt im Rahmen einer Gastdozentur von Marcus Görner und kein offizielles Angebot der Hochschule Hof.
 
 ## 2. Verantwortlicher
 Verantwortlich im Sinne der DSGVO ist:
 
-*(Hier bitte Namen und Kontaktdaten des verantwortlichen Studierenden/Dozenten einfügen)*
-Hochschule Hof
-Alfons-Goppel-Platz 1
-95028 Hof
+**Marcus Görner**
+an der Beermahd 12
+82229 Hechendorf
+Deutschland
+
+E-Mail: marcus.goener@requestchange.eu
 
 ## 3. Hosting (Vercel)
-Wir hosten diese Anwendung bei **Vercel Inc.**, 340 S Lemon Ave #4133, Walnut, CA 91789, USA.
+Wir hosten diese Anwendung bei **Vercel Inc.**
 
-Wenn Sie unsere Website besuchen, erfasst Vercel diverse Logfiles inklusive Ihrer IP-Adressen (anonymisiert oder gekürzt). Dies ist technisch erforderlich, um Ihnen unsere Website anzuzeigen und deren Stabilität und Sicherheit zu gewährleisten. Grundlage für die Datenverarbeitung ist Art. 6 Abs. 1 lit. f DSGVO (Berechtigtes Interesse).
-
-Vercel verarbeitet Daten unter anderem in den USA. Wir schließen mit Vercel einen Auftragsverarbeitungsvertrag (Data Processing Agreement) gemäß Art. 28 DSGVO ab, der Standardvertragsklauseln (SCC) der EU-Kommission enthält, um ein angemessenes Datenschutzniveau zu gewährleisten.
+Die Datenverarbeitung erfolgt ausschließlich auf Servern innerhalb der Europäischen Union (Region: Frankfurt am Main), sodass kein Drittlandtransfer stattfindet.
 
 Weitere Infos zum Datenschutz bei Vercel: https://vercel.com/legal/privacy-policy
 
@@ -45,3 +45,16 @@ Bitte wenden Sie sich hierfür an den oben genannten Verantwortlichen.
 
 ## 7. Hinweis zur Testphase
 Diese Plattform ist ein Prototyp ("Test") für eine Vorlesung. Es werden keine sensiblen Echtdaten von Studierenden (außer den für den Test notwendigen Mock-Daten oder freiwilligen Eingaben) dauerhaft gespeichert. Nach Abschluss des Semesters/Projekts werden alle Daten gelöscht.
+
+## 8. Nutzungsbedingungen & Haftungsausschluss
+**Haftungsausschluss:** Diese Anwendung ist ein Prototyp und wird ausschließlich zu Demonstrationszwecken im Rahmen der Lehre bereitgestellt ("As-is"). Es wird keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit übernommen. Jegliche Haftung für Schäden, die direkt oder indirekt aus der Nutzung entstehen (insbesondere Datenverlust), wird ausgeschlossen, soweit dies gesetzlich zulässig ist.
+
+## 9. Impressum
+Angaben gemäß § 5 DDG:
+
+Marcus Görner
+an der Beermahd 12
+82229 Hechendorf
+
+Kontakt:
+E-Mail: marcus.goener@requestchange.eu
