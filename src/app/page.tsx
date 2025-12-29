@@ -70,7 +70,7 @@ export default function LandingPage() {
           <div className={styles.hero}>
             <div className={styles.badge}>
               <span className={styles.badgeDot} />
-              Hochschule Hof &middot; Mobility Design
+              Mobility Design · Project Management
             </div>
 
             <h1 className={styles.title}>
@@ -178,8 +178,8 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className={styles.footer}>
-        <a href="/DATENSCHUTZ.md">Datenschutz</a>
-        <span>&copy; {new Date().getFullYear()} Hochschule Hof</span>
+        <a href="/datenschutz">Datenschutz</a>
+        <span>&copy; {new Date().getFullYear()} Marcus Görner</span>
       </footer>
     </main>
   );
