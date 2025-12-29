@@ -13,7 +13,7 @@ an der Beermahd 12
 82229 Hechendorf
 Deutschland
 
-E-Mail: marcus.goener@requestchange.eu
+E-Mail: marcus.goerner@requestchange.eu
 
 ## 3. Hosting (Vercel)
 Wir hosten diese Anwendung bei **Vercel Inc.**
@@ -57,4 +57,4 @@ an der Beermahd 12
 82229 Hechendorf
 
 Kontakt:
-E-Mail: marcus.goener@requestchange.eu
+E-Mail: marcus.goerner@requestchange.eu

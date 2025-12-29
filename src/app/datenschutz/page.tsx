@@ -33,7 +33,7 @@ export default function PrivacyPage() {
                         an der Beermahd 12<br />
                         82229 Hechendorf<br />
                         Deutschland<br /><br />
-                        E-Mail: marcus.goener@requestchange.eu
+                        E-Mail: marcus.goerner@requestchange.eu
                     </p>
                 </section>
 
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
                         an der Beermahd 12<br />
                         82229 Hechendorf<br /><br />
                         Kontakt:<br />
-                        E-Mail: marcus.goener@requestchange.eu
+                        E-Mail: marcus.goerner@requestchange.eu
                     </p>
                 </section>
 

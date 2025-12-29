@@ -78,7 +78,7 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
                         an der Beermahd 12<br />
                         82229 Hechendorf<br />
                         Deutschland<br />
-                        E-Mail: marcus.goener@requestchange.eu<br />
+                        E-Mail: marcus.goerner@requestchange.eu<br />
                     </p>
 
                     <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>2. Art der verarbeiteten Daten</h3>
@@ -139,7 +139,7 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
                     <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>7. Kontakt</h3>
                     <p style={{ marginBottom: '16px' }}>
                         Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br />
-                        marcus.goener@requestchange.eu
+                        marcus.goerner@requestchange.eu
                     </p>
 
                     <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>8. Nutzungsbedingungen & Haftungsausschluss</h3>
@@ -155,7 +155,7 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
                         82229 Hechendorf<br />
                         <br />
                         Kontakt:<br />
-                        E-Mail: marcus.goener@requestchange.eu
+                        E-Mail: marcus.goerner@requestchange.eu
                     </p>
                 </div>
 
