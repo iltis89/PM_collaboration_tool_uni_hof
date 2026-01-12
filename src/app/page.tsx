@@ -28,7 +28,7 @@ export default function LandingPage() {
       const result = await login(email, password);
 
       if (result.success) {
-        if (result.requirePasswordChange) {
+        if (result.data.requirePasswordChange) {
           router.push('/change-password');
         } else {
           router.push('/dashboard');

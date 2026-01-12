@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Card from '@/components/Card'
 import styles from '../Admin.module.css'
 import type { News } from '../types'
+import { renderFormattedText, formattedTextStyle } from '@/lib/format-text'
 
 export default function NewsTab() {
     const [news, setNews] = useState<News[]>([])
@@ -60,11 +61,11 @@ export default function NewsTab() {
                         className={styles.input}
                     />
                     <textarea
-                        placeholder="Inhalt"
+                        placeholder="Inhalt (Absätze mit Enter, **fett** für Hervorhebungen)"
                         value={newNews.content}
                         onChange={e => setNewNews({ ...newNews, content: e.target.value })}
                         className={styles.textarea}
-                        rows={3}
+                        rows={6}
                     />
                     <button type="submit" className={styles.submitBtn}>Veröffentlichen</button>
                 </form>
@@ -80,7 +81,9 @@ export default function NewsTab() {
                             <span className="material-symbols-outlined">delete</span>
                         </button>
                         <h4 className={styles.newsTitle}>{n.title}</h4>
-                        <p className={styles.newsContent}>{n.content}</p>
+                        <div className={styles.newsContent} style={formattedTextStyle}>
+                            {renderFormattedText(n.content)}
+                        </div>
                         <div className={styles.newsDate}>{new Date(n.createdAt).toLocaleDateString()}</div>
                     </div>
                 ))}

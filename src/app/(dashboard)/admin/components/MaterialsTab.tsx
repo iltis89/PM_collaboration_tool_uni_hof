@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Card from '@/components/Card'
 import styles from '../Admin.module.css'
 import type { Material, CurriculumTopic } from '../types'
+import { renderFormattedText, formattedTextStyle } from '@/lib/format-text'
 
 export default function MaterialsTab() {
     const [materials, setMaterials] = useState<Material[]>([])
@@ -85,12 +86,12 @@ export default function MaterialsTab() {
                         onChange={e => setNewMaterial({ ...newMaterial, title: e.target.value })}
                         className={styles.input}
                     />
-                    <input
-                        type="text"
-                        placeholder="Beschreibung"
+                    <textarea
+                        placeholder="Beschreibung (Absätze mit Enter, **fett**, *kursiv*)"
                         value={newMaterial.description}
                         onChange={e => setNewMaterial({ ...newMaterial, description: e.target.value })}
-                        className={styles.input}
+                        className={styles.textarea}
+                        rows={3}
                     />
                     <div className={styles.fieldGroup}>
                         <label className={styles.fieldLabel}>Lehrplan-Thema (optional)</label>
@@ -124,7 +125,9 @@ export default function MaterialsTab() {
                     <div key={m.id} className={styles.listItem}>
                         <div>
                             <div className={styles.listItemTitle}>{m.title}</div>
-                            <div className={styles.listItemDescription}>{m.description || 'Keine Beschreibung'}</div>
+                            <div className={styles.listItemDescription} style={formattedTextStyle}>
+                                {m.description ? renderFormattedText(m.description) : 'Keine Beschreibung'}
+                            </div>
                         </div>
                         <button onClick={() => handleDelete(m.id)} className={styles.deleteBtn}>
                             <span className="material-symbols-outlined">delete</span>

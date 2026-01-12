@@ -3,6 +3,10 @@
 import { prisma } from '@/lib/prisma'
 import { hash } from 'bcryptjs'
 import { getCurrentUser } from './auth'
+import { success, error, type ActionResult } from '@/lib/action-result'
+import { translatePrismaError } from '@/lib/prisma-errors'
+import { createUserSchema, idSchema, validateInput } from '@/lib/validation'
+import type { User } from '@prisma/client'
 
 async function requireAuth() {
     const user = await getCurrentUser()
@@ -20,7 +24,9 @@ async function requireAdmin() {
     return user
 }
 
-export async function getUsers() {
+type SafeUser = Pick<User, 'id' | 'email' | 'name' | 'role' | 'xp' | 'level' | 'createdAt' | 'privacyAccepted' | 'privacyAcceptedAt'>
+
+export async function getUsers(): Promise<SafeUser[]> {
     await requireAdmin()
     return prisma.user.findMany({
         select: { id: true, email: true, name: true, role: true, xp: true, level: true, createdAt: true, privacyAccepted: true, privacyAcceptedAt: true },
@@ -50,20 +56,34 @@ export async function getAdminStats() {
     };
 }
 
-export async function createUser(data: { email: string; name: string; password: string; role?: 'STUDENT' | 'ADMIN' }) {
-    await requireAdmin()
-    const hashedPassword = await hash(data.password, 12)
-    return prisma.user.create({
-        data: {
-            email: data.email,
-            name: data.name,
-            password: hashedPassword,
-            role: data.role || 'STUDENT',
-        },
-    })
+export async function createUser(data: unknown): Promise<ActionResult<SafeUser>> {
+    try {
+        await requireAdmin()
+        const validated = validateInput(createUserSchema, data)
+        const hashedPassword = await hash(validated.password, 12)
+
+        const user = await prisma.user.create({
+            data: {
+                email: validated.email,
+                name: validated.name,
+                password: hashedPassword,
+                role: validated.role || 'STUDENT',
+            },
+            select: { id: true, email: true, name: true, role: true, xp: true, level: true, createdAt: true, privacyAccepted: true, privacyAcceptedAt: true }
+        })
+        return success(user)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
-export async function deleteUser(id: string) {
-    await requireAdmin()
-    return prisma.user.delete({ where: { id } })
+export async function deleteUser(id: unknown): Promise<ActionResult<{ id: string }>> {
+    try {
+        await requireAdmin()
+        const validatedId = validateInput(idSchema, id)
+        await prisma.user.delete({ where: { id: validatedId } })
+        return success({ id: validatedId })
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }

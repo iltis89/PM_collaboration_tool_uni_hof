@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Card from '@/components/Card'
 import styles from '../Admin.module.css'
 import type { CurriculumTopic } from '../types'
+import { renderFormattedText, formattedTextStyle } from '@/lib/format-text'
 
 type TopicStatus = 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED'
 
@@ -169,7 +170,11 @@ export default function CurriculumTab() {
                                     {getStatusLabel(t.status)}
                                 </span>
                             </div>
-                            {t.description && <div className={styles.topicDescription}>{t.description}</div>}
+                            {t.description && (
+                                <div className={styles.topicDescription} style={formattedTextStyle}>
+                                    {renderFormattedText(t.description)}
+                                </div>
+                            )}
                             {t.date && <div className={styles.topicDate}>{new Date(t.date).toLocaleDateString()}</div>}
                         </div>
                         <button onClick={() => handleDelete(t.id)} className={styles.deleteBtn}>

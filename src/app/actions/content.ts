@@ -2,6 +2,20 @@
 
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from './auth'
+import { success, error, type ActionResult } from '@/lib/action-result'
+import { translatePrismaError } from '@/lib/prisma-errors'
+import {
+    createMaterialSchema,
+    createNewsSchema,
+    newsReactionSchema,
+    createAudioSnippetSchema,
+    createLectureSchema,
+    createCurriculumTopicSchema,
+    updateCurriculumTopicSchema,
+    idSchema,
+    validateInput
+} from '@/lib/validation'
+import type { Material, News, AudioSnippet, Lecture, CurriculumTopic } from '@prisma/client'
 
 async function requireAuth() {
     const user = await getCurrentUser()
@@ -28,14 +42,26 @@ export async function getMaterials() {
     })
 }
 
-export async function createMaterial(data: { title: string; description?: string; fileUrl?: string; size?: string; topicId?: string }) {
-    await requireAdmin()
-    return prisma.material.create({ data })
+export async function createMaterial(data: unknown): Promise<ActionResult<Material>> {
+    try {
+        await requireAdmin()
+        const validated = validateInput(createMaterialSchema, data)
+        const material = await prisma.material.create({ data: validated })
+        return success(material)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
-export async function deleteMaterial(id: string) {
-    await requireAdmin()
-    return prisma.material.delete({ where: { id } })
+export async function deleteMaterial(id: unknown): Promise<ActionResult<Material>> {
+    try {
+        await requireAdmin()
+        const validatedId = validateInput(idSchema, id)
+        const material = await prisma.material.delete({ where: { id: validatedId } })
+        return success(material)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
 // ============== CURRICULUM ==============
@@ -47,22 +73,41 @@ export async function getCurriculumTopics() {
     })
 }
 
-export async function createCurriculumTopic(data: { title: string; description?: string; order: number; date?: Date; status?: 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED' }) {
-    await requireAdmin()
-    return prisma.curriculumTopic.create({ data })
+export async function createCurriculumTopic(data: unknown): Promise<ActionResult<CurriculumTopic>> {
+    try {
+        await requireAdmin()
+        const validated = validateInput(createCurriculumTopicSchema, data)
+        const topic = await prisma.curriculumTopic.create({ data: validated })
+        return success(topic)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
-export async function updateCurriculumTopic(id: string, data: { title?: string; description?: string; order?: number; date?: Date; status?: 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED' }) {
-    await requireAdmin()
-    return prisma.curriculumTopic.update({
-        where: { id },
-        data
-    })
+export async function updateCurriculumTopic(id: unknown, data: unknown): Promise<ActionResult<CurriculumTopic>> {
+    try {
+        await requireAdmin()
+        const validatedId = validateInput(idSchema, id)
+        const validated = validateInput(updateCurriculumTopicSchema, data)
+        const topic = await prisma.curriculumTopic.update({
+            where: { id: validatedId },
+            data: validated
+        })
+        return success(topic)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
-export async function deleteCurriculumTopic(id: string) {
-    await requireAdmin()
-    return prisma.curriculumTopic.delete({ where: { id } })
+export async function deleteCurriculumTopic(id: unknown): Promise<ActionResult<CurriculumTopic>> {
+    try {
+        await requireAdmin()
+        const validatedId = validateInput(idSchema, id)
+        const topic = await prisma.curriculumTopic.delete({ where: { id: validatedId } })
+        return success(topic)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
 // ============== NEWS ==============
@@ -73,14 +118,26 @@ export async function getNews() {
     })
 }
 
-export async function createNews(data: { title: string; content: string; author?: string }) {
-    await requireAdmin()
-    return prisma.news.create({ data })
+export async function createNews(data: unknown): Promise<ActionResult<News>> {
+    try {
+        await requireAdmin()
+        const validated = validateInput(createNewsSchema, data)
+        const news = await prisma.news.create({ data: validated })
+        return success(news)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
-export async function deleteNews(id: string) {
-    await requireAdmin()
-    return prisma.news.delete({ where: { id } })
+export async function deleteNews(id: unknown): Promise<ActionResult<News>> {
+    try {
+        await requireAdmin()
+        const validatedId = validateInput(idSchema, id)
+        const news = await prisma.news.delete({ where: { id: validatedId } })
+        return success(news)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
 export async function getNewsReactions(newsId: string) {
@@ -90,24 +147,36 @@ export async function getNewsReactions(newsId: string) {
     })
 }
 
-export async function addNewsReaction(newsId: string, emoji: string) {
-    const user = await requireAuth()
+export async function addNewsReaction(newsId: unknown, emoji: unknown): Promise<ActionResult<{ emoji: string }>> {
+    try {
+        const user = await requireAuth()
+        const validated = validateInput(newsReactionSchema, { newsId, emoji })
 
-    return prisma.newsReaction.upsert({
-        where: {
-            newsId_userId: { newsId, userId: user.id }
-        },
-        update: { emoji },
-        create: { newsId, userId: user.id, emoji }
-    })
+        const reaction = await prisma.newsReaction.upsert({
+            where: {
+                newsId_userId: { newsId: validated.newsId, userId: user.id }
+            },
+            update: { emoji: validated.emoji },
+            create: { newsId: validated.newsId, userId: user.id, emoji: validated.emoji }
+        })
+        return success({ emoji: reaction.emoji })
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
-export async function removeNewsReaction(newsId: string) {
-    const user = await requireAuth()
+export async function removeNewsReaction(newsId: unknown): Promise<ActionResult<{ count: number }>> {
+    try {
+        const user = await requireAuth()
+        const validatedId = validateInput(idSchema, newsId)
 
-    return prisma.newsReaction.deleteMany({
-        where: { newsId, userId: user.id }
-    })
+        const result = await prisma.newsReaction.deleteMany({
+            where: { newsId: validatedId, userId: user.id }
+        })
+        return success({ count: result.count })
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
 // ============== AUDIO ==============
@@ -118,14 +187,26 @@ export async function getAudioSnippets() {
     })
 }
 
-export async function createAudioSnippet(data: { title: string; description?: string; url: string; duration?: number; transcript?: string }) {
-    await requireAdmin()
-    return prisma.audioSnippet.create({ data })
+export async function createAudioSnippet(data: unknown): Promise<ActionResult<AudioSnippet>> {
+    try {
+        await requireAdmin()
+        const validated = validateInput(createAudioSnippetSchema, data)
+        const snippet = await prisma.audioSnippet.create({ data: validated })
+        return success(snippet)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
-export async function deleteAudioSnippet(id: string) {
-    await requireAdmin()
-    return prisma.audioSnippet.delete({ where: { id } })
+export async function deleteAudioSnippet(id: unknown): Promise<ActionResult<AudioSnippet>> {
+    try {
+        await requireAdmin()
+        const validatedId = validateInput(idSchema, id)
+        const snippet = await prisma.audioSnippet.delete({ where: { id: validatedId } })
+        return success(snippet)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
 // ============== LECTURES ==============
@@ -136,19 +217,24 @@ export async function getLectures() {
     })
 }
 
-export async function createLecture(data: {
-    title: string;
-    description?: string;
-    room?: string;
-    professor?: string;
-    startTime: Date;
-    endTime: Date;
-}) {
-    await requireAdmin()
-    return prisma.lecture.create({ data })
+export async function createLecture(data: unknown): Promise<ActionResult<Lecture>> {
+    try {
+        await requireAdmin()
+        const validated = validateInput(createLectureSchema, data)
+        const lecture = await prisma.lecture.create({ data: validated })
+        return success(lecture)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }
 
-export async function deleteLecture(id: string) {
-    await requireAdmin()
-    return prisma.lecture.delete({ where: { id } })
+export async function deleteLecture(id: unknown): Promise<ActionResult<Lecture>> {
+    try {
+        await requireAdmin()
+        const validatedId = validateInput(idSchema, id)
+        const lecture = await prisma.lecture.delete({ where: { id: validatedId } })
+        return success(lecture)
+    } catch (err) {
+        return error(translatePrismaError(err))
+    }
 }

@@ -35,7 +35,7 @@ export default function ChangePasswordPage() {
                 router.refresh();
                 router.push('/dashboard');
             }
-        } catch (err) {
+        } catch {
             setError('Ein unerwarteter Fehler ist aufgetreten.');
         } finally {
             setIsLoading(false);

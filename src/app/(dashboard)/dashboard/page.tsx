@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Card from '@/components/Card';
 import ProgressCircle from '@/components/ProgressCircle';
 import NewsCard from '@/components/NewsCard';
@@ -51,7 +52,7 @@ export default async function Dashboard() {
 
                 <Card title="Aktionen">
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                        <a href="/exam-prep" style={{ textDecoration: 'none' }}>
+                        <Link href="/exam-prep" style={{ textDecoration: 'none' }}>
                             <button style={{
                                 width: '100%',
                                 padding: '24px',
@@ -66,8 +67,8 @@ export default async function Dashboard() {
                                 <span className="material-symbols-outlined" style={{ color: 'var(--accent)' }}>school</span>
                                 <span>Lernen</span>
                             </button>
-                        </a>
-                        <a href="/collaboration" style={{ textDecoration: 'none' }}>
+                        </Link>
+                        <Link href="/collaboration" style={{ textDecoration: 'none' }}>
                             <button style={{
                                 width: '100%',
                                 padding: '24px',
@@ -82,14 +83,14 @@ export default async function Dashboard() {
                                 <span className="material-symbols-outlined" style={{ color: 'var(--primary)' }}>forum</span>
                                 <span>Forum</span>
                             </button>
-                        </a>
+                        </Link>
                     </div>
                 </Card>
 
                 <Card title="Geplante Vorlesungen">
                     {upcomingLectures.length > 0 ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxHeight: '400px', overflowY: 'auto', paddingRight: '8px' }}>
-                            {upcomingLectures.map((lecture: any, index: number) => (
+                            {upcomingLectures.map((lecture: { id: string; title: string; startTime: Date; room: string | null; professor: string | null }, index: number) => (
                                 <div key={lecture.id} style={{
                                     padding: '12px 0',
                                     borderBottom: index < upcomingLectures.length - 1 ? '1px solid var(--border)' : 'none'

@@ -105,115 +105,117 @@ export default function Collaboration() {
 
     async function handleCreateThread(e: React.FormEvent) {
         e.preventDefault();
-        try {
-            const created = await createThread(newThread);
-            setShowNewThreadForm(false);
-            setNewThread({ title: '', content: '' });
-            await loadThreads();
-            handleSelectThread(created.id);
-        } catch (err: any) {
-            alert('Fehler: ' + err.message);
+        const result = await createThread(newThread);
+        if (!result.success) {
+            alert('Fehler: ' + result.error);
+            return;
         }
+        setShowNewThreadForm(false);
+        setNewThread({ title: '', content: '' });
+        await loadThreads();
+        handleSelectThread(result.data.id);
     }
 
     async function handleUpdateThread(e: React.FormEvent) {
         e.preventDefault();
         if (!selectedThread) return;
-        try {
-            await updateThread(selectedThread.id, editThreadData);
-            setEditingThread(false);
-            await loadThreads();
-            handleSelectThread(selectedThread.id); // Reload details
-        } catch (err: any) {
-            alert('Fehler: ' + err.message);
+        const result = await updateThread(selectedThread.id, editThreadData);
+        if (!result.success) {
+            alert('Fehler: ' + result.error);
+            return;
         }
+        setEditingThread(false);
+        await loadThreads();
+        handleSelectThread(selectedThread.id); // Reload details
     }
 
     async function handleSendMessage(e: React.FormEvent) {
         e.preventDefault();
         if (!selectedThread || !newMessage.trim()) return;
         setIsSendingMessage(true);
-        try {
-            await createMessage(selectedThread.id, newMessage);
-            setNewMessage('');
-            const updated = await getThread(selectedThread.id);
-            setSelectedThread(updated as ThreadDetail);
-            await loadThreads();
-        } catch (err: any) {
-            alert('Fehler: ' + err.message);
-        } finally {
+        const result = await createMessage(selectedThread.id, newMessage);
+        if (!result.success) {
+            alert('Fehler: ' + result.error);
             setIsSendingMessage(false);
+            return;
         }
+        setNewMessage('');
+        const updated = await getThread(selectedThread.id);
+        setSelectedThread(updated as ThreadDetail);
+        await loadThreads();
+        setIsSendingMessage(false);
     }
 
     async function handleUpdateMessage(messageId: string) {
         if (!editMessageContent.trim() || !selectedThread) return;
-        try {
-            await updateMessage(messageId, editMessageContent);
-            setEditingMessageId(null);
-            const updated = await getThread(selectedThread.id);
-            setSelectedThread(updated as ThreadDetail);
-        } catch (err: any) {
-            alert('Fehler: ' + err.message);
+        const result = await updateMessage(messageId, editMessageContent);
+        if (!result.success) {
+            alert('Fehler: ' + result.error);
+            return;
         }
+        setEditingMessageId(null);
+        const updated = await getThread(selectedThread.id);
+        setSelectedThread(updated as ThreadDetail);
     }
 
     async function handleDeleteMessage(messageId: string) {
         if (!confirm("Nachricht wirklich löschen?") || !selectedThread) return;
-        try {
-            await deleteMessage(messageId);
-            const updated = await getThread(selectedThread.id);
-            setSelectedThread(updated as ThreadDetail);
-            await loadThreads();
-        } catch (err: any) {
-            alert('Fehler: ' + err.message);
+        const result = await deleteMessage(messageId);
+        if (!result.success) {
+            alert('Fehler: ' + result.error);
+            return;
         }
+        const updated = await getThread(selectedThread.id);
+        setSelectedThread(updated as ThreadDetail);
+        await loadThreads();
     }
 
     async function handleSendChatMessage(e: React.FormEvent) {
         e.preventDefault();
         if (!newChatMessage.trim()) return;
         setIsSendingChatMessage(true);
-        try {
-            await sendCourseMessage(newChatMessage);
-            setNewChatMessage('');
-            await loadChatMessages();
-            chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        } catch (e: any) {
-            console.error(e);
-        } finally {
+        const result = await sendCourseMessage(newChatMessage);
+        if (!result.success) {
+            console.error(result.error);
             setIsSendingChatMessage(false);
+            return;
         }
+        setNewChatMessage('');
+        await loadChatMessages();
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        setIsSendingChatMessage(false);
     }
 
     async function handleUpdateChatMessage(messageId: string) {
         if (!editChatMessageContent.trim()) return;
-        try {
-            await updateCourseMessage(messageId, editChatMessageContent);
-            setEditingChatMessageId(null);
-            await loadChatMessages();
-        } catch (e: any) {
-            console.error(e);
+        const result = await updateCourseMessage(messageId, editChatMessageContent);
+        if (!result.success) {
+            console.error(result.error);
+            return;
         }
+        setEditingChatMessageId(null);
+        await loadChatMessages();
     }
 
     async function handleDeleteChatMessage(messageId: string) {
         if (!confirm("Nachricht wirklich löschen?")) return;
-        try {
-            await deleteCourseMessage(messageId);
-            await loadChatMessages();
-        } catch (e: any) {
-            console.error(e);
+        const result = await deleteCourseMessage(messageId);
+        if (!result.success) {
+            console.error(result.error);
+            return;
         }
+        await loadChatMessages();
     }
 
     async function handleDeleteThread(id: string) {
         if (!confirm("Wirklich löschen?")) return;
-        try {
-            await deleteThread(id);
-            setSelectedThread(null);
-            loadThreads();
-        } catch (e: any) { alert(e.message); }
+        const result = await deleteThread(id);
+        if (!result.success) {
+            alert(result.error);
+            return;
+        }
+        setSelectedThread(null);
+        loadThreads();
     }
 
     const canEdit = (authorId: string) => currentUser?.role === 'ADMIN' || currentUser?.id === authorId;

@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from 'react';
 import styles from './CurriculumTimeline.module.css';
 
 interface Topic {
@@ -37,7 +35,7 @@ export default function CurriculumTimeline({ topics, onTopicSelect, selectedTopi
             <div className={styles.timelineWrapper}>
                 <div className={styles.timeline}>
                     <div className={styles.progressLine} />
-                    {sortedTopics.map((topic, index) => (
+                    {sortedTopics.map((topic, _index) => (
                         <div
                             key={topic.id}
                             className={`${styles.topicNode} ${selectedTopicId === topic.id ? styles.active : ''} ${styles[topic.status.toLowerCase()]}`}

@@ -79,12 +79,12 @@ export default function LecturesTab() {
                         className={styles.input}
                         required
                     />
-                    <input
-                        type="text"
-                        placeholder="Beschreibung (optional)"
+                    <textarea
+                        placeholder="Beschreibung (Absätze mit Enter)"
                         value={newLecture.description}
                         onChange={e => setNewLecture({ ...newLecture, description: e.target.value })}
-                        className={styles.input}
+                        className={styles.textarea}
+                        rows={3}
                     />
                     <div className={styles.formRow}>
                         <input

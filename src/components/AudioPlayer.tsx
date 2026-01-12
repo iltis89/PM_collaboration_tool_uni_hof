@@ -17,7 +17,7 @@ export default function AudioPlayer({ snippet }: { snippet: AudioSnippet }) {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [playbackRate, setPlaybackRate] = useState(1);
-    const [volume, setVolume] = useState(1);
+    const [_volume, _setVolume] = useState(1);
     const [showTranscript, setShowTranscript] = useState(false);
 
     useEffect(() => {

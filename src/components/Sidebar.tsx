@@ -1,8 +1,8 @@
 "use client";
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import styles from './Sidebar.module.css';
 import { getCurrentUser, logout } from '@/app/actions';
 
@@ -33,6 +33,7 @@ export default function Sidebar() {
     }, []);
 
     // Close mobile menu on route change
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => {
         setMobileOpen(false);
     }, [pathname]);

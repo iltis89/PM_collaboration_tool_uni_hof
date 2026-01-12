@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PM Online Learning Tool
+
+Eine interaktive Lernplattform für **Projektmanagement** an der Hochschule Hof.
+
+## Features
+
+- 🎓 **Prüfungsvorbereitung** – Quiz-System mit Erklärungen
+- 📚 **Lernmaterialien** – Upload & Organisation nach Lehrplan
+- 💬 **Collaboration** – Diskussionsforum & Kurs-Chat
+- 🎧 **Audio Learning** – Audio-Snippets mit Transkription
+- 📅 **Vorlesungsplanung** – Kalender für Dozenten
+- 🏆 **Gamification** – XP, Levels, Streaks
+- 👤 **User Management** – Rollen (Student/Admin)
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 16, React 19, TypeScript |
+| Backend | Next.js Server Actions |
+| Database | PostgreSQL + Prisma ORM |
+| Auth | JWT (jose) + bcryptjs |
+| Storage | Vercel Blob |
+| Deployment | Vercel |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL database
+- Vercel account (for Blob storage)
+
+### Installation
 
 ```bash
+# Clone & install
+git clone https://github.com/iltis89/PM_collaboration_tool_uni_hof.git
+cd PM_collaboration_tool_uni_hof
+npm install
+
+# Setup environment
+cp .env.example .env.local
+# Edit .env.local with your values
+
+# Setup database
+npm run db:push
+npm run db:seed
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+DATABASE_URL="postgresql://..."
+JWT_SECRET="min-32-characters-secret-key"
+BLOB_READ_WRITE_TOKEN="vercel_blob_..."
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── (auth)/           # Auth pages (change-password)
+│   ├── (dashboard)/      # Protected routes
+│   │   ├── admin/        # Admin panel (modular components)
+│   │   ├── dashboard/    # User dashboard
+│   │   ├── exam-prep/    # Exam system
+│   │   ├── materials/    # Learning materials
+│   │   └── collaboration/# Forum
+│   ├── actions/          # Server Actions (modular)
+│   │   ├── auth.ts
+│   │   ├── users.ts
+│   │   ├── content.ts
+│   │   ├── exams.ts
+│   │   └── collaboration.ts
+│   └── api/              # API routes
+├── components/           # Reusable UI components
+├── lib/                  # Utilities
+│   ├── auth.ts          # JWT handling
+│   ├── prisma.ts        # Database client
+│   ├── env.ts           # Environment validation
+│   └── rate-limit.ts    # Login rate limiting
+└── middleware.ts         # Route protection
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Security Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- ✅ JWT-based authentication
+- ✅ Role-based access control (RBAC)
+- ✅ Rate limiting (5 login attempts / 15 min)
+- ✅ Environment validation in production
+- ✅ HTTP-only secure cookies
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run dev       # Development server
+npm run build     # Production build
+npm run lint      # ESLint check
+npm run db:push   # Push schema to database
+npm run db:seed   # Seed database with test data
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+Private project for Hochschule Hof.

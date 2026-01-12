@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Card from '@/components/Card'
 import styles from '../Admin.module.css'
 import type { AudioSnippet } from '../types'
+import { renderFormattedText, formattedTextStyle } from '@/lib/format-text'
 
 export default function AudioTab() {
     const [audioSnippets, setAudioSnippets] = useState<AudioSnippet[]>([])
@@ -80,19 +81,19 @@ export default function AudioTab() {
                         onChange={e => setNewAudio({ ...newAudio, title: e.target.value })}
                         className={styles.input}
                     />
-                    <input
-                        type="text"
-                        placeholder="Beschreibung"
+                    <textarea
+                        placeholder="Beschreibung (**fett**, *kursiv*)"
                         value={newAudio.description}
                         onChange={e => setNewAudio({ ...newAudio, description: e.target.value })}
-                        className={styles.input}
+                        className={styles.textarea}
+                        rows={2}
                     />
                     <textarea
-                        placeholder="Transkript (Optional)"
+                        placeholder="Transkript (Absätze mit Enter, **fett**, *kursiv*)"
                         value={newAudio.transcript}
                         onChange={e => setNewAudio({ ...newAudio, transcript: e.target.value })}
                         className={styles.textarea}
-                        rows={4}
+                        rows={6}
                     />
                     <div className={styles.fieldGroup}>
                         <label className={styles.fieldLabel}>Audio-Datei auswählen (MP3, WAV)</label>
@@ -114,7 +115,9 @@ export default function AudioTab() {
                     <div key={a.id} className={styles.listItem}>
                         <div>
                             <div className={styles.listItemTitle}>{a.title}</div>
-                            <div className={styles.listItemDescription}>{a.description || 'Keine Beschreibung'}</div>
+                            <div className={styles.listItemDescription} style={formattedTextStyle}>
+                                {a.description ? renderFormattedText(a.description) : 'Keine Beschreibung'}
+                            </div>
                         </div>
                         <button onClick={() => handleDelete(a.id)} className={styles.deleteBtn}>
                             <span className="material-symbols-outlined">delete</span>
