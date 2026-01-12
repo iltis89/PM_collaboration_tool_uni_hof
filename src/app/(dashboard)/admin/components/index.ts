@@ -1,0 +1,7 @@
+export { default as OverviewTab } from './OverviewTab'
+export { default as UsersTab } from './UsersTab'
+export { default as MaterialsTab } from './MaterialsTab'
+export { default as NewsTab } from './NewsTab'
+export { default as AudioTab } from './AudioTab'
+export { default as LecturesTab } from './LecturesTab'
+export { default as CurriculumTab } from './CurriculumTab'

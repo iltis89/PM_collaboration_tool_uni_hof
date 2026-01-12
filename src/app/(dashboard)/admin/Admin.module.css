@@ -169,3 +169,319 @@
         padding: 24px;
     }
 }
+
+/* ============================================
+   REFACTORED COMPONENT STYLES
+   ============================================ */
+
+.tabContent {
+    display: grid;
+    gap: 24px;
+}
+
+.overviewContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.statCard {
+    padding: 10px;
+}
+
+.statContent {
+    padding: 10px;
+}
+
+.statLabel {
+    font-size: 0.9rem;
+    color: var(--foreground-muted);
+}
+
+.statValue {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.statValueSuccess {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--success);
+}
+
+.topStudentsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.topStudentRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.topStudentRow:last-child {
+    border-bottom: none;
+}
+
+.topStudentRank {
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 30px;
+}
+
+.topStudentName {
+    flex: 1;
+    font-weight: 500;
+}
+
+.topStudentXp {
+    font-size: 0.85rem;
+    color: var(--foreground-muted);
+}
+
+/* Form Styles */
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 12px;
+}
+
+.formRow {
+    display: flex;
+    gap: 12px;
+}
+
+.formRow>* {
+    flex: 1;
+}
+
+.fieldGroup {
+    margin-bottom: 8px;
+}
+
+.fieldLabel {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    color: var(--foreground-muted);
+}
+
+.fileInput {
+    width: 100%;
+    padding: 8px;
+    background: var(--surface-highlight);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--foreground);
+}
+
+/* Table Styles */
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: left;
+}
+
+.table th {
+    border-bottom: 1px solid var(--border);
+}
+
+.table tr {
+    border-bottom: 1px solid var(--surface-highlight);
+}
+
+.userNameCell {
+    font-weight: 600;
+}
+
+.mutedCell {
+    color: var(--foreground-muted);
+}
+
+.actionsCol {
+    text-align: right;
+}
+
+.successText {
+    color: var(--success);
+}
+
+.errorText {
+    color: var(--error);
+}
+
+.deleteBtn {
+    background: none;
+    border: none;
+    color: var(--error);
+    cursor: pointer;
+    padding: 4px;
+}
+
+.deleteBtn:hover {
+    opacity: 0.8;
+}
+
+/* List Items */
+.listItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+}
+
+.listItemTitle {
+    font-weight: 600;
+}
+
+.listItemDescription {
+    font-size: 0.85rem;
+    color: var(--foreground-muted);
+}
+
+/* News Items */
+.newsCard {
+    padding: 16px;
+    background: var(--surface-highlight);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.newsDeleteBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--error);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.newsTitle {
+    margin: 0 0 8px 0;
+}
+
+.newsContent {
+    font-size: 0.9rem;
+    color: var(--foreground-muted);
+    margin: 0;
+}
+
+.newsDate {
+    font-size: 0.75rem;
+    margin-top: 8px;
+    opacity: 0.5;
+}
+
+/* Lecture Items */
+.lectureItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+}
+
+.lectureTitle {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.lectureTime {
+    color: var(--accent);
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.lectureMeta {
+    font-size: 0.9rem;
+    color: var(--foreground-muted);
+}
+
+/* Topic Items */
+.topicItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+}
+
+.topicHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topicOrder {
+    font-size: 0.75rem;
+    background: var(--accent);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.topicTitle {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.topicStatus {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.topicDescription {
+    font-size: 0.9rem;
+    color: var(--foreground-muted);
+    margin-top: 4px;
+}
+
+.topicDate {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    margin-top: 4px;
+}
+
+.emptyState {
+    color: var(--foreground-muted);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .formRow {
+        flex-direction: column;
+    }
+
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+}

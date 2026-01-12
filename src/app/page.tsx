@@ -44,8 +44,6 @@ export default function LandingPage() {
     }
   };
 
-  // Demo login removed
-
   return (
     <main className={styles.main}>
       {/* Animated Background */}
@@ -171,7 +169,6 @@ export default function LandingPage() {
               </button>
             </form>
 
-            {/* Demo button removed */}
           </div>
         )}
       </div>
