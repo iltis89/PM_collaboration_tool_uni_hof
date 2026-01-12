@@ -152,7 +152,7 @@ export default function Materials() {
                             <div className={styles.viewerContent}>
                                 {selectedMaterial.fileUrl ? (
                                     <iframe
-                                        src={selectedMaterial.fileUrl}
+                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(selectedMaterial.fileUrl)}&embedded=true`}
                                         className={styles.pdfFrame}
                                         title={selectedMaterial.title}
                                     />
