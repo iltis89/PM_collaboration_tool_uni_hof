@@ -52,13 +52,19 @@ export default function LandingPage() {
         <div className={styles.gradient2} />
         <div className={styles.gradient3} />
         <div className={styles.particles}>
-          {mounted && [...Array(20)].map((_, i) => (
-            <div key={i} className={styles.particle} style={{
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${10 + Math.random() * 20}s`
-            }} />
-          ))}
+          {mounted && [...Array(20)].map((_, i) => {
+            // Use deterministic values based on index to avoid hydration mismatch
+            const left = ((i * 17 + 3) % 100);
+            const delay = ((i * 7) % 5);
+            const duration = 10 + ((i * 13) % 20);
+            return (
+              <div key={i} className={styles.particle} style={{
+                left: `${left}%`,
+                animationDelay: `${delay}s`,
+                animationDuration: `${duration}s`
+              }} />
+            );
+          })}
         </div>
       </div>
 
