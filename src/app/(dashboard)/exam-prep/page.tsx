@@ -36,7 +36,36 @@ export default function ExamPrep() {
                 {exams.length === 0 && <p style={{ textAlign: 'center', color: 'var(--foreground-muted)' }}>Keine Prüfungen verfügbar.</p>}
 
                 {exams.map((exam) => (
-                    <Card key={exam.id} className="glass-card" style={{ padding: '32px' }}>
+                    <Card
+                        key={exam.id}
+                        className="glass-card"
+                        style={{
+                            padding: '32px',
+                            opacity: exam.isUnlocked ? 1 : 0.5,
+                            filter: exam.isUnlocked ? 'none' : 'grayscale(40%)',
+                            transition: 'all 0.3s ease',
+                            position: 'relative'
+                        }}
+                    >
+                        {/* Lock Overlay for locked exams */}
+                        {!exam.isUnlocked && (
+                            <div style={{
+                                position: 'absolute',
+                                top: '16px',
+                                right: '16px',
+                                background: 'rgba(0,0,0,0.6)',
+                                padding: '6px 12px',
+                                borderRadius: '100px',
+                                fontSize: '0.75rem',
+                                color: 'var(--foreground-muted)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px'
+                            }}>
+                                🔒 Vorheriges Modul bestehen
+                            </div>
+                        )}
+
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '16px' }}>
                             <div>
                                 <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '8px' }}>
@@ -47,12 +76,12 @@ export default function ExamPrep() {
                                 </p>
                             </div>
                             <div style={{
-                                background: 'var(--surface-highlight)',
+                                background: exam.isUnlocked ? 'var(--surface-highlight)' : 'transparent',
                                 padding: '8px 16px',
                                 borderRadius: '100px',
                                 fontSize: '0.9rem',
                                 fontWeight: 600,
-                                color: 'var(--accent)'
+                                color: exam.isUnlocked ? 'var(--accent)' : 'var(--foreground-muted)'
                             }}>
                                 {exam.duration} Min.
                             </div>
@@ -83,7 +112,7 @@ export default function ExamPrep() {
                                     </div>
                                 ) : (
                                     <div style={{ fontSize: '0.8rem', color: 'var(--foreground-muted)', fontStyle: 'italic' }}>
-                                        Noch nicht absolviert
+                                        {exam.isUnlocked ? 'Noch nicht absolviert' : '—'}
                                     </div>
                                 )}
                             </div>
@@ -99,8 +128,7 @@ export default function ExamPrep() {
                                     borderRadius: 'var(--radius-sm)',
                                     fontWeight: 600,
                                     cursor: exam.isUnlocked ? 'pointer' : 'not-allowed',
-                                    fontSize: '1rem',
-                                    opacity: exam.isUnlocked ? 1 : 0.7
+                                    fontSize: '1rem'
                                 }}
                             >
                                 {exam.isUnlocked ? 'Starten' : '🔒 Gesperrt'}
