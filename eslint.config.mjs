@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Seed files - console.log is acceptable for CLI utilities
+    "prisma/seed*.ts",
   ]),
   // Custom stricter rules
   {

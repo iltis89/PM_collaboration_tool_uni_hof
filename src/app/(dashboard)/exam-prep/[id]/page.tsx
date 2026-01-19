@@ -35,14 +35,24 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getExam(examId).then(data => {
-            if (data) {
-                setExam(data);
-                setTimeLeft(data.duration * 60);
-            }
-            setLoading(false);
-        });
-    }, [examId]);
+        getExam(examId)
+            .then(data => {
+                if (data) {
+                    setExam(data);
+                    setTimeLeft(data.duration * 60);
+                }
+                setLoading(false);
+            })
+            .catch((err) => {
+                // Redirect bei Zugriff auf gesperrte Prüfung
+                if (err.message?.includes('Themenblock') || err.message?.includes('bestanden')) {
+                    router.push('/exam-prep');
+                } else {
+                    console.error(err);
+                    setLoading(false);
+                }
+            });
+    }, [examId, router]);
 
     // Timer logic preserved but less aggressive
     useEffect(() => {

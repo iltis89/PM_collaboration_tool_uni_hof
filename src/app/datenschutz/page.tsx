@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function PrivacyPage() {
     return (
         <div style={{
@@ -21,7 +23,7 @@ export default function PrivacyPage() {
                 <section style={{ marginBottom: '2rem' }}>
                     <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--accent)' }}>1. Einleitung</h2>
                     <p style={{ lineHeight: 1.6 }}>
-                        Diese Datenschutzerklärung klärt Nutzer über die Art, den Umfang und Zwecke der Erhebung und Verwendung personenbezogener Daten innerhalb dieser Online-Lernplattform ("Plattform") auf. Dies ist ein privates Projekt im Rahmen einer Gastdozentur von Marcus Görner und kein offizielles Angebot der Hochschule Hof.
+                        Diese Datenschutzerklärung klärt Nutzer über die Art, den Umfang und Zwecke der Erhebung und Verwendung personenbezogener Daten innerhalb dieser Online-Lernplattform (&quot;Plattform&quot;) auf. Dies ist ein privates Projekt im Rahmen einer Gastdozentur von Marcus Görner und kein offizielles Angebot der Hochschule Hof.
                     </p>
                 </section>
 
@@ -49,7 +51,7 @@ export default function PrivacyPage() {
                 <section style={{ marginBottom: '2rem' }}>
                     <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--accent)' }}>4. Art der verarbeiteten Daten</h2>
                     <ul style={{ paddingLeft: '20px', lineHeight: 1.6 }}>
-                        <li><strong>Bestandsdaten:</strong> Namen (z.B. User-Logins "Student", "Admin")</li>
+                        <li><strong>Bestandsdaten:</strong> Namen (z.B. User-Logins &quot;Student&quot;, &quot;Admin&quot;)</li>
                         <li><strong>Inhaltsdaten:</strong> Texteingaben im Chat/Forum, hochgeladene Dateien.</li>
                         <li><strong>Nutzungsdaten:</strong> Besuchte Seiten, Zugriffszeiten, Klickpfade.</li>
                     </ul>
@@ -79,14 +81,14 @@ export default function PrivacyPage() {
                 <section style={{ marginBottom: '2rem' }}>
                     <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--accent)' }}>7. Hinweis zur Testphase</h2>
                     <p style={{ lineHeight: 1.6 }}>
-                        Diese Plattform ist ein Prototyp ("Test") für eine Vorlesung. Es werden keine sensiblen Echtdaten von Studierenden (außer den für den Test notwendigen Mock-Daten oder freiwilligen Eingaben) dauerhaft gespeichert. Nach Abschluss des Semesters/Projekts werden alle Daten gelöscht.
+                        Diese Plattform ist ein Prototyp (&quot;Test&quot;) für eine Vorlesung. Es werden keine sensiblen Echtdaten von Studierenden (außer den für den Test notwendigen Mock-Daten oder freiwilligen Eingaben) dauerhaft gespeichert. Nach Abschluss des Semesters/Projekts werden alle Daten gelöscht.
                     </p>
                 </section>
 
                 <section style={{ marginBottom: '2rem' }}>
                     <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--accent)' }}>8. Nutzungsbedingungen & Haftungsausschluss</h2>
                     <p style={{ lineHeight: 1.6 }}>
-                        <strong>Haftungsausschluss:</strong> Diese Anwendung ist ein Prototyp und wird ausschließlich zu Demonstrationszwecken im Rahmen der Lehre bereitgestellt ("As-is"). Es wird keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit übernommen. Jegliche Haftung für Schäden, die direkt oder indirekt aus der Nutzung entstehen (insbesondere Datenverlust), wird ausgeschlossen, soweit dies gesetzlich zulässig ist.
+                        <strong>Haftungsausschluss:</strong> Diese Anwendung ist ein Prototyp und wird ausschließlich zu Demonstrationszwecken im Rahmen der Lehre bereitgestellt (&quot;As-is&quot;). Es wird keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit übernommen. Jegliche Haftung für Schäden, die direkt oder indirekt aus der Nutzung entstehen (insbesondere Datenverlust), wird ausgeschlossen, soweit dies gesetzlich zulässig ist.
                     </p>
                 </section>
 
@@ -103,7 +105,7 @@ export default function PrivacyPage() {
                 </section>
 
                 <div style={{ marginTop: '40px' }}>
-                    <a href="/" style={{
+                    <Link href="/" style={{
                         display: 'inline-block',
                         padding: '10px 20px',
                         background: 'var(--accent)',
@@ -113,7 +115,7 @@ export default function PrivacyPage() {
                         fontWeight: 'bold'
                     }}>
                         Zurück zur Startseite
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

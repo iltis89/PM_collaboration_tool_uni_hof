@@ -144,7 +144,7 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
 
                     <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>8. Nutzungsbedingungen & Haftungsausschluss</h3>
                     <p style={{ marginBottom: '16px' }}>
-                        <strong>Haftungsausschluss:</strong> Diese Anwendung ist ein Prototyp und wird ausschließlich zu Demonstrationszwecken im Rahmen der Lehre bereitgestellt ("As-is"). Es wird keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit übernommen. Jegliche Haftung für Schäden, die direkt oder indirekt aus der Nutzung entstehen (insbesondere Datenverlust), wird ausgeschlossen, soweit dies gesetzlich zulässig ist.
+                        <strong>Haftungsausschluss:</strong> Diese Anwendung ist ein Prototyp und wird ausschließlich zu Demonstrationszwecken im Rahmen der Lehre bereitgestellt (&quot;As-is&quot;). Es wird keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit übernommen. Jegliche Haftung für Schäden, die direkt oder indirekt aus der Nutzung entstehen (insbesondere Datenverlust), wird ausgeschlossen, soweit dies gesetzlich zulässig ist.
                     </p>
 
                     <h3 style={{ color: 'var(--foreground)', marginTop: '24px', marginBottom: '12px' }}>Impressum</h3>
@@ -167,7 +167,7 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
                     marginBottom: '24px'
                 }}>
                     <p style={{ fontSize: '0.9rem', color: 'var(--foreground)' }}>
-                        <strong>Einwilligung:</strong> Mit dem Klick auf "Akzeptieren und fortfahren"
+                        <strong>Einwilligung:</strong> Mit dem Klick auf &quot;Akzeptieren und fortfahren&quot;
                         bestätige ich, dass ich die Datenschutzvereinbarung gelesen habe und
                         mit der Verarbeitung meiner Daten zu den genannten Zwecken einverstanden bin.
                     </p>

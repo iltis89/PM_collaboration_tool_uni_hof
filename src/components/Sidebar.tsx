@@ -32,9 +32,11 @@ export default function Sidebar() {
         getCurrentUser().then(setUser);
     }, []);
 
-    // Close mobile menu on route change
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // Close mobile menu on route change - this is a valid use case for syncing UI state
+    // with navigation changes. The lint rule is overly strict here as this prevents
+    // the menu from staying open when navigating, which is expected UX behavior.
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMobileOpen(false);
     }, [pathname]);
 

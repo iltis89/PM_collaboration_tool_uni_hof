@@ -10,6 +10,9 @@ interface ExamListItem {
     title: string;
     description: string;
     duration: number;
+    order: number;
+    type: 'TOPIC_BLOCK' | 'MAIN_EXAM';
+    isUnlocked: boolean;
     _count?: { questions: number };
     results?: { score: number; passed: boolean }[];
 }
@@ -86,19 +89,21 @@ export default function ExamPrep() {
                             </div>
 
                             <button
-                                onClick={() => router.push(`/exam-prep/${exam.id}`)}
+                                onClick={() => exam.isUnlocked && router.push(`/exam-prep/${exam.id}`)}
+                                disabled={!exam.isUnlocked}
                                 style={{
                                     padding: '12px 32px',
-                                    background: 'var(--primary)',
-                                    color: 'black',
+                                    background: exam.isUnlocked ? 'var(--primary)' : 'var(--surface-highlight)',
+                                    color: exam.isUnlocked ? 'black' : 'var(--foreground-muted)',
                                     border: 'none',
                                     borderRadius: 'var(--radius-sm)',
                                     fontWeight: 600,
-                                    cursor: 'pointer',
-                                    fontSize: '1rem'
+                                    cursor: exam.isUnlocked ? 'pointer' : 'not-allowed',
+                                    fontSize: '1rem',
+                                    opacity: exam.isUnlocked ? 1 : 0.7
                                 }}
                             >
-                                Starten
+                                {exam.isUnlocked ? 'Starten' : '🔒 Gesperrt'}
                             </button>
                         </div>
                     </Card>

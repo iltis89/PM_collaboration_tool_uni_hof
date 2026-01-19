@@ -87,11 +87,18 @@ model NewsReaction {
   @@unique([newsId, userId]) // One reaction per user per news item
 }
 
+enum ExamType {
+  TOPIC_BLOCK    // Themenblock (sequentiell)
+  MAIN_EXAM      // Hauptprüfung (finale)
+}
+
 model Exam {
   id          String         @id @default(cuid())
   title       String
   description String
   duration    Int            // in minutes
+  order       Int            @unique  // Reihenfolge für Freischaltung
+  type        ExamType       @default(TOPIC_BLOCK)
   questions   QuizQuestion[]
   results     ExamResult[]
   createdAt   DateTime       @default(now())

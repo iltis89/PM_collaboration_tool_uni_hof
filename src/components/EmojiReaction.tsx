@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getNewsReactions, addNewsReaction } from '@/app/actions';
 import styles from './EmojiReaction.module.css';
 
@@ -17,11 +17,7 @@ export default function EmojiReaction({ newsId, currentUserId }: EmojiReactionPr
     const [showPicker, setShowPicker] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        loadReactions();
-    }, [newsId]);
-
-    const loadReactions = async () => {
+    const loadReactions = useCallback(async () => {
         try {
             const data = await getNewsReactions(newsId);
             setReactions(data);
@@ -33,7 +29,11 @@ export default function EmojiReaction({ newsId, currentUserId }: EmojiReactionPr
         } catch (e) {
             console.error('Error loading reactions', e);
         }
-    };
+    }, [newsId, currentUserId]);
+
+    useEffect(() => {
+        loadReactions();
+    }, [loadReactions]);
 
     const handleReaction = async (emoji: string) => {
         if (isLoading) return;

@@ -16,12 +16,10 @@ async function requireAuth() {
 export async function getExams() {
     const user = await getCurrentUser()
 
-    return prisma.exam.findMany({
-        orderBy: { createdAt: 'desc' },
+    const exams = await prisma.exam.findMany({
+        orderBy: { order: 'asc' },
         include: {
-            _count: {
-                select: { questions: true }
-            },
+            _count: { select: { questions: true } },
             results: user ? {
                 where: { userId: user.id },
                 orderBy: { score: 'desc' },
@@ -29,15 +27,80 @@ export async function getExams() {
             } : false
         }
     })
+
+    // Bestandene Themenblöcke ermitteln
+    const passedBlocks = user ? await prisma.examResult.findMany({
+        where: {
+            userId: user.id,
+            passed: true,
+            exam: { type: 'TOPIC_BLOCK' }
+        },
+        select: { examId: true }
+    }) : []
+    const passedBlockIds = new Set(passedBlocks.map(r => r.examId))
+
+    const topicBlocks = exams.filter(e => e.type === 'TOPIC_BLOCK')
+    const allBlocksPassed = topicBlocks.length > 0 && topicBlocks.every(b => passedBlockIds.has(b.id))
+
+    let previousBlockPassed = true
+    return exams.map(exam => {
+        let isUnlocked: boolean
+
+        if (exam.type === 'MAIN_EXAM') {
+            // Hauptprüfung: nur wenn ALLE Themenblöcke bestanden
+            isUnlocked = allBlocksPassed
+        } else {
+            // Themenblock: nur wenn vorheriger bestanden
+            isUnlocked = previousBlockPassed
+            previousBlockPassed = passedBlockIds.has(exam.id)
+        }
+
+        return { ...exam, isUnlocked }
+    })
 }
 
 export async function getExam(examId: string) {
-    return prisma.exam.findUnique({
+    const user = await getCurrentUser()
+
+    const exam = await prisma.exam.findUnique({
         where: { id: examId },
-        include: {
-            questions: true
-        }
+        include: { questions: true }
     })
+
+    if (!exam) return null
+
+    // Zugriffsschutz: Nur wenn freigeschaltet
+    if (user) {
+        if (exam.type === 'MAIN_EXAM') {
+            // Alle Themenblöcke müssen bestanden sein
+            const blockCount = await prisma.exam.count({ where: { type: 'TOPIC_BLOCK' } })
+            const passedCount = await prisma.examResult.count({
+                where: {
+                    userId: user.id,
+                    passed: true,
+                    exam: { type: 'TOPIC_BLOCK' }
+                }
+            })
+            if (passedCount < blockCount) {
+                throw new Error('Alle Themenblöcke müssen erst bestanden werden')
+            }
+        } else if (exam.order > 1) {
+            // Vorheriger Block muss bestanden sein
+            const prevExam = await prisma.exam.findFirst({
+                where: { order: exam.order - 1, type: 'TOPIC_BLOCK' }
+            })
+            if (prevExam) {
+                const prevPassed = await prisma.examResult.findFirst({
+                    where: { userId: user.id, examId: prevExam.id, passed: true }
+                })
+                if (!prevPassed) {
+                    throw new Error('Vorheriger Themenblock muss erst bestanden werden')
+                }
+            }
+        }
+    }
+
+    return exam
 }
 
 export async function submitExam(examId: string, answers: { [questionId: string]: number }) {
