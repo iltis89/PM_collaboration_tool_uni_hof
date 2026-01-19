@@ -38,7 +38,8 @@ async function requireAdmin() {
 export async function getMaterials() {
     return prisma.material.findMany({
         orderBy: { uploadedAt: 'desc' },
-        include: { topic: true }
+        include: { topic: true },
+        cacheStrategy: { ttl: 60 } // Cache for 60 seconds
     })
 }
 
@@ -69,7 +70,8 @@ export async function deleteMaterial(id: unknown): Promise<ActionResult<Material
 export async function getCurriculumTopics() {
     return prisma.curriculumTopic.findMany({
         orderBy: { order: 'asc' },
-        include: { materials: true }
+        include: { materials: true },
+        cacheStrategy: { ttl: 60 } // Cache for 60 seconds
     })
 }
 
@@ -115,6 +117,7 @@ export async function deleteCurriculumTopic(id: unknown): Promise<ActionResult<C
 export async function getNews() {
     return prisma.news.findMany({
         orderBy: { createdAt: 'desc' },
+        cacheStrategy: { ttl: 30 } // Cache for 30 seconds (news updates more often)
     })
 }
 
@@ -183,7 +186,8 @@ export async function removeNewsReaction(newsId: unknown): Promise<ActionResult<
 
 export async function getAudioSnippets() {
     return prisma.audioSnippet.findMany({
-        orderBy: { uploadedAt: 'desc' }
+        orderBy: { uploadedAt: 'desc' },
+        cacheStrategy: { ttl: 120 } // Cache for 2 minutes
     })
 }
 
@@ -214,6 +218,7 @@ export async function deleteAudioSnippet(id: unknown): Promise<ActionResult<Audi
 export async function getLectures() {
     return prisma.lecture.findMany({
         orderBy: { startTime: 'asc' },
+        cacheStrategy: { ttl: 60 } // Cache for 60 seconds
     })
 }
 

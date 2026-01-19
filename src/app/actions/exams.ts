@@ -16,27 +16,30 @@ async function requireAuth() {
 export async function getExams() {
     const user = await getCurrentUser()
 
-    const exams = await prisma.exam.findMany({
-        orderBy: { order: 'asc' },
-        include: {
-            _count: { select: { questions: true } },
-            results: user ? {
-                where: { userId: user.id },
-                orderBy: { score: 'desc' },
-                take: 1
-            } : false
-        }
-    })
+    // Parallel queries for better performance
+    const [exams, passedBlocks] = await Promise.all([
+        prisma.exam.findMany({
+            orderBy: { order: 'asc' },
+            include: {
+                _count: { select: { questions: true } },
+                results: user ? {
+                    where: { userId: user.id },
+                    orderBy: { score: 'desc' },
+                    take: 1
+                } : false
+            },
+            cacheStrategy: { ttl: 30 } // Cache exam list for 30 seconds
+        }),
+        user ? prisma.examResult.findMany({
+            where: {
+                userId: user.id,
+                passed: true,
+                exam: { type: 'TOPIC_BLOCK' }
+            },
+            select: { examId: true }
+        }) : Promise.resolve([])
+    ])
 
-    // Bestandene Themenblöcke ermitteln
-    const passedBlocks = user ? await prisma.examResult.findMany({
-        where: {
-            userId: user.id,
-            passed: true,
-            exam: { type: 'TOPIC_BLOCK' }
-        },
-        select: { examId: true }
-    }) : []
     const passedBlockIds = new Set(passedBlocks.map(r => r.examId))
 
     const topicBlocks = exams.filter(e => e.type === 'TOPIC_BLOCK')
