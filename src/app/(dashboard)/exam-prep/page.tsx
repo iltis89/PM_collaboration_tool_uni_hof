@@ -43,29 +43,9 @@ export default function ExamPrep() {
                             padding: '32px',
                             opacity: exam.isUnlocked ? 1 : 0.5,
                             filter: exam.isUnlocked ? 'none' : 'grayscale(40%)',
-                            transition: 'all 0.3s ease',
-                            position: 'relative'
+                            transition: 'all 0.3s ease'
                         }}
                     >
-                        {/* Lock Overlay for locked exams */}
-                        {!exam.isUnlocked && (
-                            <div style={{
-                                position: 'absolute',
-                                top: '16px',
-                                right: '16px',
-                                background: 'rgba(0,0,0,0.6)',
-                                padding: '6px 12px',
-                                borderRadius: '100px',
-                                fontSize: '0.75rem',
-                                color: 'var(--foreground-muted)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px'
-                            }}>
-                                🔒 Vorheriges Modul bestehen
-                            </div>
-                        )}
-
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '16px' }}>
                             <div>
                                 <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '8px' }}>
@@ -112,7 +92,7 @@ export default function ExamPrep() {
                                     </div>
                                 ) : (
                                     <div style={{ fontSize: '0.8rem', color: 'var(--foreground-muted)', fontStyle: 'italic' }}>
-                                        {exam.isUnlocked ? 'Noch nicht absolviert' : '—'}
+                                        {exam.isUnlocked ? 'Noch nicht absolviert' : ''}
                                     </div>
                                 )}
                             </div>
