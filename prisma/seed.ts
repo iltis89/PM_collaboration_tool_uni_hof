@@ -53,7 +53,10 @@ async function main() {
     for (const student of students) {
         await prisma.user.upsert({
             where: { email: student.email },
-            update: { mustChangePassword: true },
+            update: {
+                name: student.name,
+                mustChangePassword: true
+            },
             create: {
                 email: student.email,
                 password: studentPassword,
