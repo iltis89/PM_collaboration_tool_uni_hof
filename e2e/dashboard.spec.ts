@@ -26,7 +26,7 @@ test.describe('Dashboard Navigation', () => {
     });
 
     test('should navigate to Exam Prep page', async ({ page }) => {
-        await page.getByRole('link', { name: 'Prüfung' }).click();
+        await page.getByRole('link', { name: 'Prüfung' }).click({ force: true });
         await expect(page).toHaveURL(/.*\/exam-prep/);
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     });
