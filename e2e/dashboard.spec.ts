@@ -36,7 +36,7 @@ test.describe('Dashboard Navigation', () => {
         await expect(page.getByText('Marcus Görner')).toBeVisible();
 
         // Check for Level and XP (partial text match)
-        await expect(page.getByText(/Lvl \d+/)).toBeVisible();
-        await expect(page.getByText(/XP/)).toBeVisible();
+        await expect(page.locator('aside').getByText(/Lvl \d+/)).toBeVisible();
+        await expect(page.locator('aside').getByText(/XP/)).toBeVisible();
     });
 });
