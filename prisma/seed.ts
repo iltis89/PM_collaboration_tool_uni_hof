@@ -69,42 +69,74 @@ async function main() {
     }
 
     // Create sample materials
-    const materials = await prisma.material.createMany({
-        data: [
-            { title: 'Layer 01 - Intro to PM.pdf', size: '2.4 MB' },
-            { title: 'Layer 02 - Stakeholder Management.pdf', size: '1.8 MB' },
-            { title: 'Layer 03 - Agile Basics.pdf', size: '3.1 MB' },
-            { title: 'Case Study - Tesla.pdf', size: '5.4 MB' },
-        ],
-        skipDuplicates: true,
-    })
-    console.log('✅ Materials seeded:', materials.count)
+    const materialData = [
+        {
+            title: 'Projektmanagement 01 - Grundlagen',
+            description: 'Einführung in die Grundlagen des Projektmanagements',
+            fileUrl: 'https://dfibivartddugsms.public.blob.vercel-storage.com/Projektmanagement_01_Grundlagen-dqX9geFkiSDuXMuWodfYfqusatMr1j.pdf',
+            size: '13.5 MB'
+        },
+        {
+            title: 'Projektmanagement 02 - Prozess',
+            description: 'Projektmanagement-Prozesse und Phasen',
+            fileUrl: 'https://dfibivartddugsms.public.blob.vercel-storage.com/Projektmanagement_02_Prozess-rh5Sbkjcrb8xJCIt0ZkQtnPUC0QX6L.pdf',
+            size: '14.9 MB'
+        },
+        {
+            title: 'Wahlpflichtfach Projektmanagement',
+            description: 'Kursübersicht und Anforderungen',
+            fileUrl: 'https://dfibivartddugsms.public.blob.vercel-storage.com/Wahlpflichtfach%20Projektmanagement-pIdxjBwm5Mvalia9pHapTnMm4kv6AB.pdf',
+            size: '647 KB'
+        },
+        {
+            title: 'Design Projektmanagement - Methoden, Tools, KI',
+            description: 'Ergänzungsmaterial zu Design-Methoden und KI im PM',
+            fileUrl: 'https://dfibivartddugsms.public.blob.vercel-storage.com/Design%20Projektmanagement_%20Methoden%2C%20Tools%2C%20KI-xXWgzafu7st4JXYubi4tMgUPBJXPNd.pdf',
+            size: '393 KB'
+        }
+    ]
+
+    let materialsCount = 0
+    for (const mat of materialData) {
+        const existing = await prisma.material.findFirst({ where: { title: mat.title } })
+        if (!existing) {
+            await prisma.material.create({ data: mat })
+            materialsCount++
+        }
+    }
+    console.log('✅ Materials seeded:', materialsCount)
 
     // Create sample quiz questions
-    const quizQuestions = await prisma.quizQuestion.createMany({
-        data: [
-            {
-                question: 'Was ist die Hauptbeschränkung im magischen Dreieck des Projektmanagements?',
-                options: ['Kosten', 'Qualität', 'Alle sind Beschränkungen (Zeit, Kosten, Umfang)', 'Ressourcen'],
-                correct: 2,
-                category: 'Layer 01',
-            },
-            {
-                question: 'Welche Phase kommt zuerst im Projektlebenszyklus?',
-                options: ['Durchführung', 'Planung', 'Initiierung', 'Abschluss'],
-                correct: 2,
-                category: 'Layer 01',
-            },
-            {
-                question: 'Wer ist in Scrum für das Product Backlog verantwortlich?',
-                options: ['Scrum Master', 'Product Owner', 'Entwicklungsteam', 'Stakeholder'],
-                correct: 1,
-                category: 'Layer 03',
-            },
-        ],
-        skipDuplicates: true,
-    })
-    console.log('✅ Quiz questions seeded:', quizQuestions.count)
+    const questionData = [
+        {
+            question: 'Was ist die Hauptbeschränkung im magischen Dreieck des Projektmanagements?',
+            options: ['Kosten', 'Qualität', 'Alle sind Beschränkungen (Zeit, Kosten, Umfang)', 'Ressourcen'],
+            correct: 2,
+            category: 'Layer 01',
+        },
+        {
+            question: 'Welche Phase kommt zuerst im Projektlebenszyklus?',
+            options: ['Durchführung', 'Planung', 'Initiierung', 'Abschluss'],
+            correct: 2,
+            category: 'Layer 01',
+        },
+        {
+            question: 'Wer ist in Scrum für das Product Backlog verantwortlich?',
+            options: ['Scrum Master', 'Product Owner', 'Entwicklungsteam', 'Stakeholder'],
+            correct: 1,
+            category: 'Layer 03',
+        },
+    ]
+
+    let questionsCount = 0
+    for (const q of questionData) {
+        const existing = await prisma.quizQuestion.findFirst({ where: { question: q.question } })
+        if (!existing) {
+            await prisma.quizQuestion.create({ data: q })
+            questionsCount++
+        }
+    }
+    console.log('✅ Quiz questions seeded:', questionsCount)
 
     // Create sample news
     const news = await prisma.news.create({
