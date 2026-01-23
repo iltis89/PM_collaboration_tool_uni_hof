@@ -31,7 +31,6 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<{ [key: string]: number }>({});
     const [checked, setChecked] = useState(false); // New state to track if current question was checked
-    const [timeLeft, setTimeLeft] = useState(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -39,7 +38,6 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
             .then(data => {
                 if (data) {
                     setExam(data);
-                    setTimeLeft(data.duration * 60);
                 }
                 setLoading(false);
             })
@@ -54,14 +52,7 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
             });
     }, [examId, router]);
 
-    // Timer logic preserved but less aggressive
-    useEffect(() => {
-        if (!timeLeft) return;
-        const timer = setInterval(() => {
-            setTimeLeft(prev => Math.max(0, prev - 1));
-        }, 1000);
-        return () => clearInterval(timer);
-    }, [timeLeft]);
+
 
     async function handleSubmit() {
         if (!exam) return;
@@ -88,24 +79,12 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
     const selectedAnswer = answers[currentQuestion.id];
     const isCorrect = selectedAnswer === currentQuestion.correct;
 
-    const formatTime = (seconds: number) => {
-        const m = Math.floor(seconds / 60);
-        const s = seconds % 60;
-        return `${m}:${s < 10 ? '0' : ''}${s}`;
-    };
+
 
     return (
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h1 style={{ fontSize: '1.5rem', fontWeight: 600 }}>{exam.title}</h1>
-                <div style={{
-                    fontFamily: 'monospace',
-                    fontSize: '1.2rem',
-                    color: 'var(--foreground-muted)',
-                    fontWeight: 600
-                }}>
-                    {formatTime(timeLeft)}
-                </div>
             </div>
 
             <Card className="glass-card" style={{ padding: '48px', position: 'relative', overflow: 'hidden' }}>

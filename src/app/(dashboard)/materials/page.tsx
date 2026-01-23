@@ -29,6 +29,7 @@ export default function Materials() {
     const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
     const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isPdfLoading, setIsPdfLoading] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
@@ -93,7 +94,12 @@ export default function Materials() {
                             <button
                                 key={file.id}
                                 className={`${styles.materialItem} ${selectedMaterial?.id === file.id ? styles.active : ''}`}
-                                onClick={() => setSelectedMaterial(file)}
+                                onClick={() => {
+                                    if (selectedMaterial?.id !== file.id) {
+                                        setSelectedMaterial(file);
+                                        setIsPdfLoading(true);
+                                    }
+                                }}
                             >
                                 <div className={styles.materialIcon}>
                                     <span className="material-symbols-outlined">description</span>
@@ -151,11 +157,21 @@ export default function Materials() {
 
                             <div className={styles.viewerContent}>
                                 {selectedMaterial.fileUrl ? (
-                                    <iframe
-                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(selectedMaterial.fileUrl)}&embedded=true`}
-                                        className={styles.pdfFrame}
-                                        title={selectedMaterial.title}
-                                    />
+                                    <>
+                                        {isPdfLoading && (
+                                            <div className={styles.loaderOverlay}>
+                                                <span className="material-symbols-outlined spin">progress_activity</span>
+                                                <p>Lade Dokument...</p>
+                                            </div>
+                                        )}
+                                        <iframe
+                                            key={selectedMaterial.id}
+                                            src={`https://docs.google.com/gview?url=${encodeURIComponent(selectedMaterial.fileUrl)}&embedded=true`}
+                                            className={styles.pdfFrame}
+                                            title={selectedMaterial.title}
+                                            onLoad={() => setIsPdfLoading(false)}
+                                        />
+                                    </>
                                 ) : (
                                     <div className={styles.noPreview}>
                                         <span className="material-symbols-outlined">picture_as_pdf</span>
