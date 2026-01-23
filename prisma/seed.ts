@@ -39,7 +39,7 @@ async function main() {
         { name: 'Metecan Durak', email: 'metecan.durak@hof-university.de' },
         { name: 'Maryam Pazouki', email: 'Maryam.pazouki@hof-university.de' },
         { name: 'Lavinia Kolofik', email: 'lavinia.kolofik@hof-university.de' },
-        { name: 'Niklas Lauterbach', email: 'nlauterbach@hof-university.de' },
+        { name: 'Nina', email: 'nlauterbach@hof-university.de' },
         { name: 'Kiri Wolf', email: 'kwolf@hof-university.de' },
         { name: 'Dominika Zajaczkowska', email: 'Dominika.zajaczkowska@hof-university.de' },
         { name: 'Kasra Nobari', email: 'kasra.nobari@hof-university.de' },
