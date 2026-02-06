@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma'
 import { compare, hash } from 'bcryptjs'
 import { cookies, headers } from 'next/headers'
-import { encrypt, getSession } from '@/lib/auth'
+import { encrypt, getSession, shouldUseSecureCookies } from '@/lib/auth'
 import { isRateLimited, recordFailedAttempt, clearRateLimit } from '@/lib/rate-limit'
 import { success, error, type ActionResult } from '@/lib/action-result'
 import { loginSchema, changePasswordSchema, validateInput } from '@/lib/validation'
@@ -62,7 +62,7 @@ export async function login(email: unknown, password: unknown): Promise<ActionRe
         cookieStore.set('session', sessionCookie, {
             expires,
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: shouldUseSecureCookies(),
             sameSite: 'lax',
         })
 

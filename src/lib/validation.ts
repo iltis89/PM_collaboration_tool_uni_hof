@@ -26,7 +26,7 @@ export const createMaterialSchema = z.object({
     description: z.string().max(1000, 'Beschreibung darf maximal 1000 Zeichen haben').optional(),
     fileUrl: z.string().url('Ungültige URL').optional(),
     size: z.string().optional(),
-    topicId: z.string().uuid('Ungültige Topic-ID').optional(),
+    topicId: z.string().cuid('Ungültige Topic-ID').optional(),
 })
 
 export const createNewsSchema = z.object({
@@ -36,7 +36,7 @@ export const createNewsSchema = z.object({
 })
 
 export const newsReactionSchema = z.object({
-    newsId: z.string().min(1, 'News-ID ist erforderlich'),
+    newsId: z.string().cuid('Ungültige News-ID'),
     emoji: z.string().min(1).max(10, 'Emoji darf maximal 10 Zeichen haben'),
 })
 
@@ -96,7 +96,7 @@ export const createForumPostSchema = z.object({
 })
 
 export const createForumReplySchema = z.object({
-    postId: z.string().min(1, 'Post-ID ist erforderlich'),
+    postId: z.string().cuid('Ungültige Post-ID'),
     content: z.string().min(1, 'Inhalt ist erforderlich').max(5000),
 })
 
@@ -106,7 +106,7 @@ export const createChatMessageSchema = z.object({
 
 // ============== ID SCHEMA ==============
 
-export const idSchema = z.string().min(1, 'ID ist erforderlich')
+export const idSchema = z.string().cuid('Ungültige ID')
 
 // ============== HELPER ==============
 

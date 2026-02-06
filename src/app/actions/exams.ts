@@ -11,10 +11,48 @@ async function requireAuth() {
     return user
 }
 
+async function assertExamUnlocked(userId: string, exam: { id: string; type: 'TOPIC_BLOCK' | 'MAIN_EXAM'; order: number }) {
+    if (exam.type === 'MAIN_EXAM') {
+        const blockCount = await prisma.exam.count({ where: { type: 'TOPIC_BLOCK' } })
+        const passedCount = await prisma.examResult.count({
+            where: {
+                userId,
+                passed: true,
+                exam: { type: 'TOPIC_BLOCK' }
+            }
+        })
+
+        if (passedCount < blockCount) {
+            throw new Error('Alle Themenblöcke müssen erst bestanden werden')
+        }
+        return
+    }
+
+    if (exam.order <= 1) {
+        return
+    }
+
+    const prevExam = await prisma.exam.findFirst({
+        where: { order: exam.order - 1, type: 'TOPIC_BLOCK' }
+    })
+
+    if (!prevExam) {
+        return
+    }
+
+    const prevPassed = await prisma.examResult.findFirst({
+        where: { userId, examId: prevExam.id, passed: true }
+    })
+
+    if (!prevPassed) {
+        throw new Error('Vorheriger Themenblock muss erst bestanden werden')
+    }
+}
+
 // ============== EXAMS ==============
 
 export async function getExams() {
-    const user = await getCurrentUser()
+    const user = await requireAuth()
 
     // Parallel queries for better performance
     const [exams, passedBlocks] = await Promise.all([
@@ -22,22 +60,22 @@ export async function getExams() {
             orderBy: { order: 'asc' },
             include: {
                 _count: { select: { questions: true } },
-                results: user ? {
+                results: {
                     where: { userId: user.id },
                     orderBy: { score: 'desc' },
                     take: 1
-                } : false
+                }
             },
             cacheStrategy: { ttl: 30 } // Cache exam list for 30 seconds
         }),
-        user ? prisma.examResult.findMany({
+        prisma.examResult.findMany({
             where: {
                 userId: user.id,
                 passed: true,
                 exam: { type: 'TOPIC_BLOCK' }
             },
             select: { examId: true }
-        }) : Promise.resolve([])
+        })
     ])
 
     const passedBlockIds = new Set(passedBlocks.map(r => r.examId))
@@ -63,7 +101,7 @@ export async function getExams() {
 }
 
 export async function getExam(examId: string) {
-    const user = await getCurrentUser()
+    const user = await requireAuth()
 
     const exam = await prisma.exam.findUnique({
         where: { id: examId },
@@ -72,36 +110,7 @@ export async function getExam(examId: string) {
 
     if (!exam) return null
 
-    // Zugriffsschutz: Nur wenn freigeschaltet
-    if (user) {
-        if (exam.type === 'MAIN_EXAM') {
-            // Alle Themenblöcke müssen bestanden sein
-            const blockCount = await prisma.exam.count({ where: { type: 'TOPIC_BLOCK' } })
-            const passedCount = await prisma.examResult.count({
-                where: {
-                    userId: user.id,
-                    passed: true,
-                    exam: { type: 'TOPIC_BLOCK' }
-                }
-            })
-            if (passedCount < blockCount) {
-                throw new Error('Alle Themenblöcke müssen erst bestanden werden')
-            }
-        } else if (exam.order > 1) {
-            // Vorheriger Block muss bestanden sein
-            const prevExam = await prisma.exam.findFirst({
-                where: { order: exam.order - 1, type: 'TOPIC_BLOCK' }
-            })
-            if (prevExam) {
-                const prevPassed = await prisma.examResult.findFirst({
-                    where: { userId: user.id, examId: prevExam.id, passed: true }
-                })
-                if (!prevPassed) {
-                    throw new Error('Vorheriger Themenblock muss erst bestanden werden')
-                }
-            }
-        }
-    }
+    await assertExamUnlocked(user.id, exam)
 
     return exam
 }
@@ -115,9 +124,14 @@ export async function submitExam(examId: string, answers: { [questionId: string]
     })
 
     if (!exam) throw new Error('Exam not found')
+    await assertExamUnlocked(user.id, exam)
 
     let correctCount = 0
     const totalQuestions = exam.questions.length
+
+    if (totalQuestions === 0) {
+        throw new Error('Exam has no questions')
+    }
 
     exam.questions.forEach((q: { id: string; correct: number }) => {
         if (answers[q.id] === q.correct) {
@@ -128,23 +142,41 @@ export async function submitExam(examId: string, answers: { [questionId: string]
     const score = Math.round((correctCount / totalQuestions) * 100)
     const passed = score >= 50
 
-    if (passed) {
-        await prisma.user.update({
-            where: { id: user.id },
-            data: { xp: { increment: 50 } }
-        })
-    }
+    const { result, xpAwarded } = await prisma.$transaction(async (tx) => {
+        let shouldAwardXp = false
 
-    const result = await prisma.examResult.create({
-        data: {
-            userId: user.id,
-            examId,
-            score,
-            passed
+        if (passed) {
+            const alreadyPassed = await tx.examResult.findFirst({
+                where: {
+                    userId: user.id,
+                    examId,
+                    passed: true
+                },
+                select: { id: true }
+            })
+
+            if (!alreadyPassed) {
+                shouldAwardXp = true
+                await tx.user.update({
+                    where: { id: user.id },
+                    data: { xp: { increment: 50 } }
+                })
+            }
         }
+
+        const createdResult = await tx.examResult.create({
+            data: {
+                userId: user.id,
+                examId,
+                score,
+                passed
+            }
+        })
+
+        return { result: createdResult, xpAwarded: shouldAwardXp }
     })
 
-    return { success: true, result }
+    return { success: true, result, xpAwarded }
 }
 
 export async function getExamResults() {

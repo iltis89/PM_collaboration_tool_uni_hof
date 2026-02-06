@@ -5,6 +5,12 @@ import { NextRequest, NextResponse } from 'next/server'
 const SECRET_KEY = process.env.JWT_SECRET || 'dev-secret-key-change-this-in-prod'
 const key = new TextEncoder().encode(SECRET_KEY)
 
+export function shouldUseSecureCookies() {
+    if (process.env.COOKIE_SECURE === 'true') return true
+    if (process.env.COOKIE_SECURE === 'false') return false
+    return process.env.NODE_ENV === 'production'
+}
+
 
 interface SessionPayload {
     user: {
@@ -56,6 +62,8 @@ export async function updateSession(request: NextRequest) {
         name: 'session',
         value: await encrypt(parsed),
         httpOnly: true,
+        secure: shouldUseSecureCookies(),
+        sameSite: 'lax',
         expires: parsed.expires,
     })
     return res

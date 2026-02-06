@@ -10,6 +10,7 @@ interface RateLimitEntry {
 }
 
 const loginAttempts = new Map<string, RateLimitEntry>()
+const RATE_LIMIT_DISABLED = process.env.DISABLE_RATE_LIMIT === 'true'
 
 const RATE_LIMIT_CONFIG = {
     maxAttempts: 5,           // Max attempts before blocking
@@ -21,6 +22,10 @@ const RATE_LIMIT_CONFIG = {
  * Check if an IP/identifier is rate limited
  */
 export function isRateLimited(identifier: string): { limited: boolean; remainingAttempts: number; blockedFor?: number } {
+    if (RATE_LIMIT_DISABLED) {
+        return { limited: false, remainingAttempts: RATE_LIMIT_CONFIG.maxAttempts }
+    }
+
     const now = Date.now()
     const entry = loginAttempts.get(identifier)
 
@@ -48,6 +53,10 @@ export function isRateLimited(identifier: string): { limited: boolean; remaining
  * Record a failed login attempt
  */
 export function recordFailedAttempt(identifier: string): void {
+    if (RATE_LIMIT_DISABLED) {
+        return
+    }
+
     const now = Date.now()
     const entry = loginAttempts.get(identifier)
 
@@ -76,6 +85,10 @@ export function recordFailedAttempt(identifier: string): void {
  * Clear rate limit on successful login
  */
 export function clearRateLimit(identifier: string): void {
+    if (RATE_LIMIT_DISABLED) {
+        return
+    }
+
     loginAttempts.delete(identifier)
 }
 
@@ -83,6 +96,10 @@ export function clearRateLimit(identifier: string): void {
  * Clean up old entries (call periodically)
  */
 export function cleanupRateLimits(): void {
+    if (RATE_LIMIT_DISABLED) {
+        return
+    }
+
     const now = Date.now()
     for (const [key, entry] of loginAttempts.entries()) {
         if (now - entry.lastAttempt > RATE_LIMIT_CONFIG.windowMs && entry.blockedUntil < now) {

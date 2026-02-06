@@ -39,6 +39,13 @@ const eslintConfig = defineConfig([
       // Next.js specific
       "@next/next/no-img-element": "warn",
     }
+  },
+  {
+    files: ["prisma/*.ts", "scripts/*.ts"],
+    rules: {
+      // CLI/data scripts need console output for operator feedback
+      "no-console": "off",
+    },
   }
 ]);
 

@@ -1,14 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { loginAsStudent } from './helpers';
 
 test.describe('Dashboard Navigation', () => {
     // Helper to login before each test
     test.beforeEach(async ({ page }) => {
-        await page.goto('/');
-        await page.getByRole('button', { name: 'Studenten Login' }).click();
-        await page.getByPlaceholder('E-Mail Adresse').fill('marcus.goerner@requestchange.eu');
-        await page.getByPlaceholder('Passwort').fill('Marcus$2025');
-        await page.getByRole('button', { name: 'Anmelden' }).click();
-        await expect(page).toHaveURL(/.*\/dashboard/);
+        await loginAsStudent(page);
     });
 
     test('should display all sidebar navigation links', async ({ page }) => {

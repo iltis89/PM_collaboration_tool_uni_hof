@@ -1,24 +1,19 @@
 import { test, expect } from '@playwright/test';
+import { loginAsStudent } from './helpers';
 
 test.describe('Exam Preparation Flow', () => {
     test.beforeEach(async ({ page }) => {
-        // Login
-        await page.goto('/');
-        await page.getByRole('button', { name: 'Studenten Login' }).click();
-        await page.getByPlaceholder('E-Mail Adresse').fill('marcus.goerner@requestchange.eu');
-        await page.getByPlaceholder('Passwort').fill('Marcus$2025');
-        await page.getByRole('button', { name: 'Anmelden' }).click();
-        await expect(page).toHaveURL(/.*\/dashboard/);
+        await loginAsStudent(page);
     });
 
     test('should allow starting an exam and answering a question', async ({ page }) => {
         // 1. Navigate to Exam Prep
-        await page.getByRole('link', { name: 'Prüfung' }).click();
+        await page.goto('/exam-prep');
         await expect(page).toHaveURL(/.*\/exam-prep/);
 
         // 2. Find and Start an unlocked exam
         // Wait for cards to load
-        await expect(page.locator('.glass-card').first()).toBeVisible();
+        await expect(page.getByRole('button', { name: 'Starten' }).first()).toBeVisible({ timeout: 15000 });
 
         // Find the first "Starten" button that is enabled
         const startButton = page.getByRole('button', { name: 'Starten' }).first();
