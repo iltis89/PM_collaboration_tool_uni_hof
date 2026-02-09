@@ -53,8 +53,9 @@ export const env = {
     }
 }
 
-// Validate on module load (server-side only)
-if (typeof window === 'undefined') {
+// Validate on module load (server-side only, skip during build)
+const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build'
+if (typeof window === 'undefined' && !isBuildPhase) {
     try {
         validateEnv()
     } catch (error) {
