@@ -99,7 +99,7 @@ export default function LandingPage() {
               </div>
               <div className={styles.feature}>
                 <span className="material-symbols-outlined">bolt</span>
-                XP & Levels
+                EP & Stufen
               </div>
             </div>
 
@@ -109,13 +109,13 @@ export default function LandingPage() {
                 onClick={() => { setLoginType('student'); setShowLogin(true); }}
               >
                 <span className="material-symbols-outlined">login</span>
-                Studenten Login
+                Studenten-Anmeldung
               </button>
               <button
                 className={styles.secondaryBtn}
                 onClick={() => { setLoginType('admin'); setShowLogin(true); }}
               >
-                Dozenten Login
+                Dozenten-Anmeldung
               </button>
             </div>
 
@@ -142,7 +142,7 @@ export default function LandingPage() {
             </button>
 
             <h2 className={styles.loginTitle}>
-              {loginType === 'student' ? 'Studenten' : 'Dozenten'} Login
+              {loginType === 'student' ? 'Studenten' : 'Dozenten'}-Anmeldung
             </h2>
 
             <form onSubmit={handleLogin} className={styles.loginForm}>

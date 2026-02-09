@@ -22,17 +22,17 @@ export default async function Dashboard() {
             <header style={{ marginBottom: '2rem' }}>
                 <h1 style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '0.5rem' }}>Hallo, {user.name.split(' ')[0]} 👋</h1>
                 <p style={{ color: 'var(--foreground-muted)', fontSize: 'clamp(0.85rem, 3vw, 1rem)' }}>
-                    XP sammelst du durch Quizzes (10 XP) und bestandene Module (50 XP).
+                    EP sammelst du durch Quizze (10 EP) und bestandene Module (50 EP).
                 </p>
             </header>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '32px' }}>
                 <Card title="Mein Fortschritt">
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 0', gap: '24px' }}>
-                        <ProgressCircle percentage={progressPercentage} label="Level" />
+                        <ProgressCircle percentage={progressPercentage} label="Stufe" />
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <div style={{ fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>Level <strong style={{ color: 'white' }}>{user.level}</strong></div>
-                            <div style={{ fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>XP: <strong style={{ color: 'white' }}>{user.xp}</strong> / {xpForNextLevel}</div>
+                            <div style={{ fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>Stufe <strong style={{ color: 'white' }}>{user.level}</strong></div>
+                            <div style={{ fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>EP: <strong style={{ color: 'white' }}>{user.xp}</strong> / {xpForNextLevel}</div>
                             <div style={{ fontSize: '0.9rem', color: 'var(--foreground-muted)' }}>Serie: <strong style={{ color: 'var(--accent)' }}>{user.streak || 0} Tage 🔥</strong></div>
                         </div>
                     </div>
@@ -40,11 +40,11 @@ export default async function Dashboard() {
                     <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem', color: 'var(--foreground-muted)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px', color: 'var(--foreground)' }}>
                             <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>info</span>
-                            <strong>Wie sammle ich XP?</strong>
+                            <strong>Wie sammle ich EP?</strong>
                         </div>
                         <ul style={{ paddingLeft: '20px', margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <li>Richtige Quiz-Antwort: <strong>10 XP</strong></li>
-                            <li>Bestandene Prüfung: <strong>50 XP</strong></li>
+                            <li>Richtige Quiz-Antwort: <strong>10 EP</strong></li>
+                            <li>Bestandene Prüfung: <strong>50 EP</strong></li>
                         </ul>
                     </div>
                 </Card>
@@ -114,7 +114,7 @@ export default async function Dashboard() {
                 </Card>
             </div>
 
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '24px' }}>Neuigkeiten &amp; Insights</h2>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '24px' }}>Neuigkeiten &amp; Einblicke</h2>
             {latestNews ? (
                 <NewsCard
                     id={latestNews.id}

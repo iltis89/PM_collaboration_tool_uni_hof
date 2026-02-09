@@ -51,7 +51,7 @@ export default function OverviewTab() {
                             <div key={student.id} className={styles.topStudentRow}>
                                 <span className={styles.topStudentRank}>#{index + 1}</span>
                                 <span className={styles.topStudentName}>{student.name}</span>
-                                <span className={styles.topStudentXp}>{student.xp} XP (Lvl {student.level})</span>
+                                <span className={styles.topStudentXp}>{student.xp} EP (Stufe {student.level})</span>
                             </div>
                         ))}
                     </div>

@@ -91,7 +91,7 @@ export default function UsersTab() {
                             <tr>
                                 <th>Name</th>
                                 <th>E-Mail</th>
-                                <th>XP (Level)</th>
+                                <th>EP (Stufe)</th>
                                 <th>Datenschutz?</th>
                                 <th className={styles.actionsCol}>Aktionen</th>
                             </tr>
@@ -101,7 +101,7 @@ export default function UsersTab() {
                                 <tr key={user.id}>
                                     <td className={styles.userNameCell}>{user.name}</td>
                                     <td className={styles.mutedCell}>{user.email}</td>
-                                    <td>{user.xp} XP (Lvl {user.level})</td>
+                                    <td>{user.xp} EP (Stufe {user.level})</td>
                                     <td>
                                         {user.privacyAccepted ? (
                                             <span className={styles.successText}>

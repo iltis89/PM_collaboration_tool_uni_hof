@@ -58,7 +58,7 @@ export default function PrivacyConsentModal({ onAccept }: PrivacyConsentModalPro
                     <ul className={styles.list}>
                         <li><strong>Stammdaten:</strong> Name, Vorname, E-Mail-Adresse, Matrikelnummer (falls hinterlegt).</li>
                         <li><strong>Nutzungsdaten:</strong> Login-Zeitpunkte, IP-Adressen (anonymisiert), Session-IDs.</li>
-                        <li><strong>Leistungsdaten:</strong> Lernfortschritt, Prüfungsergebnisse, XP-Punkte, erreichte Level, Badges.</li>
+                        <li><strong>Leistungsdaten:</strong> Lernfortschritt, Prüfungsergebnisse, Erfahrungspunkte, erreichte Stufen, Badges.</li>
                         <li><strong>Kommunikationsdaten:</strong> Beiträge in Foren, Chats und Nachrichten an Dozenten.</li>
                     </ul>
 

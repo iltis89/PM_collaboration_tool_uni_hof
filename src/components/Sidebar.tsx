@@ -101,7 +101,7 @@ export default function Sidebar() {
                         {user && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: 'var(--accent)', marginTop: '2px' }}>
                                 <span className="material-symbols-outlined" style={{ fontSize: '0.9rem' }}>bolt</span>
-                                <span>Lvl {user.level} &middot; {user.xp.toLocaleString()} XP</span>
+                                <span>Stufe {user.level} &middot; {user.xp.toLocaleString()} EP</span>
                             </div>
                         )}
                     </div>
