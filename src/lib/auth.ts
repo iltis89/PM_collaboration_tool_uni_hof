@@ -1,9 +1,10 @@
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
+import { cache } from 'react'
+import { env } from '@/lib/env'
 
-const SECRET_KEY = process.env.JWT_SECRET || 'dev-secret-key-change-this-in-prod'
-const key = new TextEncoder().encode(SECRET_KEY)
+const key = new TextEncoder().encode(env.jwtSecret)
 
 export function shouldUseSecureCookies() {
     if (process.env.COOKIE_SECURE === 'true') return true
@@ -48,12 +49,12 @@ export async function getSession() {
     return await decrypt(session)
 }
 
-export async function updateSession(request: NextRequest) {
+export async function updateSession(request: NextRequest, parsedSession?: SessionPayload | null) {
     const session = request.cookies.get('session')?.value
     if (!session) return
 
     // Refresh expiration on each request
-    const parsed = await decrypt(session)
+    const parsed = parsedSession ?? await decrypt(session)
     if (!parsed) return
 
     parsed.expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -68,3 +69,5 @@ export async function updateSession(request: NextRequest) {
     })
     return res
 }
+
+export const getCachedSession = cache(async () => getSession())

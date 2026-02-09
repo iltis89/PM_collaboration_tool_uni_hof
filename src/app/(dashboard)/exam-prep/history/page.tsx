@@ -16,7 +16,9 @@ export default function ExamHistory() {
     const [results, setResults] = useState<ExamResult[]>([]);
 
     useEffect(() => {
-        getExamResults().then(setResults);
+        getExamResults().then(result => {
+            if (result.success) setResults(result.data as unknown as ExamResult[]);
+        });
     }, []);
 
     return (

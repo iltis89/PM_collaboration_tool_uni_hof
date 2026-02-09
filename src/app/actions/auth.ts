@@ -3,11 +3,12 @@
 import { prisma } from '@/lib/prisma'
 import { compare, hash } from 'bcryptjs'
 import { cookies, headers } from 'next/headers'
-import { encrypt, getSession, shouldUseSecureCookies } from '@/lib/auth'
+import { encrypt, getCachedSession, shouldUseSecureCookies } from '@/lib/auth'
 import { isRateLimited, recordFailedAttempt, clearRateLimit } from '@/lib/rate-limit'
 import { success, error, type ActionResult } from '@/lib/action-result'
 import { loginSchema, changePasswordSchema, validateInput } from '@/lib/validation'
 import { translatePrismaError } from '@/lib/prisma-errors'
+import { cache } from 'react'
 
 /**
  * Login action with rate limiting protection.
@@ -35,13 +36,13 @@ export async function login(email: unknown, password: unknown): Promise<ActionRe
 
         if (!user) {
             recordFailedAttempt(identifier)
-            return error('Benutzer nicht gefunden', 'NOT_FOUND')
+            return error('E-Mail oder Passwort falsch', 'UNAUTHORIZED')
         }
 
         const passwordMatch = await compare(validated.password, user.password)
         if (!passwordMatch) {
             recordFailedAttempt(identifier)
-            return error(`Falsches Passwort. Noch ${rateLimitStatus.remainingAttempts - 1} Versuche.`, 'UNAUTHORIZED')
+            return error('E-Mail oder Passwort falsch', 'UNAUTHORIZED')
         }
 
         // Clear rate limit on successful login
@@ -126,8 +127,8 @@ export async function logout(): Promise<ActionResult<{ success: boolean }>> {
 /**
  * Get the current authenticated user.
  */
-export async function getCurrentUser() {
-    const session = await getSession()
+export const getCurrentUser = cache(async () => {
+    const session = await getCachedSession()
     if (!session || !session.user?.id) return null
 
     const user = await prisma.user.findUnique({
@@ -136,7 +137,7 @@ export async function getCurrentUser() {
     })
 
     return user
-}
+})
 
 /**
  * Accept privacy policy action.

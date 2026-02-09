@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getCurrentUser } from './auth'
+import { requireAuth, requireAdmin } from '@/lib/auth-guards'
 import { success, error, type ActionResult } from '@/lib/action-result'
 import { translatePrismaError } from '@/lib/prisma-errors'
 import {
@@ -16,22 +16,6 @@ import {
     validateInput
 } from '@/lib/validation'
 import type { Material, News, AudioSnippet, Lecture, CurriculumTopic } from '@prisma/client'
-
-async function requireAuth() {
-    const user = await getCurrentUser()
-    if (!user) {
-        throw new Error('Nicht authentifiziert')
-    }
-    return user
-}
-
-async function requireAdmin() {
-    const user = await requireAuth()
-    if (user.role !== 'ADMIN') {
-        throw new Error('Keine Admin-Berechtigung')
-    }
-    return user
-}
 
 // ============== MATERIALS ==============
 
@@ -143,9 +127,11 @@ export async function deleteNews(id: unknown): Promise<ActionResult<News>> {
     }
 }
 
-export async function getNewsReactions(newsId: string) {
+export async function getNewsReactions(newsId: unknown) {
+    await requireAuth()
+    const validatedId = validateInput(idSchema, newsId)
     return prisma.newsReaction.findMany({
-        where: { newsId },
+        where: { newsId: validatedId },
         select: { emoji: true, userId: true }
     })
 }

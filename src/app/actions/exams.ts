@@ -1,17 +1,19 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getCurrentUser } from './auth'
+import { requireAuth } from '@/lib/auth-guards'
+import { success, error, type ActionResult } from '@/lib/action-result'
+import { translatePrismaError } from '@/lib/prisma-errors'
+import { idSchema, validateInput } from '@/lib/validation'
+import { calculateExamScore } from '@/lib/exam-scoring'
+import { z } from 'zod'
 
-async function requireAuth() {
-    const user = await getCurrentUser()
-    if (!user) {
-        throw new Error('Nicht authentifiziert')
-    }
-    return user
-}
+const submitExamSchema = z.object({
+    examId: z.string().cuid('Ungültige Exam-ID'),
+    answers: z.record(z.string(), z.number()),
+})
 
-async function assertExamUnlocked(userId: string, exam: { id: string; type: 'TOPIC_BLOCK' | 'MAIN_EXAM'; order: number }) {
+async function assertExamUnlocked(userId: string, exam: { id: string; type: 'TOPIC_BLOCK' | 'MAIN_EXAM'; order: number }): Promise<string | null> {
     if (exam.type === 'MAIN_EXAM') {
         const blockCount = await prisma.exam.count({ where: { type: 'TOPIC_BLOCK' } })
         const passedCount = await prisma.examResult.count({
@@ -23,13 +25,13 @@ async function assertExamUnlocked(userId: string, exam: { id: string; type: 'TOP
         })
 
         if (passedCount < blockCount) {
-            throw new Error('Alle Themenblöcke müssen erst bestanden werden')
+            return 'Alle Themenblöcke müssen erst bestanden werden'
         }
-        return
+        return null
     }
 
     if (exam.order <= 1) {
-        return
+        return null
     }
 
     const prevExam = await prisma.exam.findFirst({
@@ -37,7 +39,7 @@ async function assertExamUnlocked(userId: string, exam: { id: string; type: 'TOP
     })
 
     if (!prevExam) {
-        return
+        return null
     }
 
     const prevPassed = await prisma.examResult.findFirst({
@@ -45,145 +47,170 @@ async function assertExamUnlocked(userId: string, exam: { id: string; type: 'TOP
     })
 
     if (!prevPassed) {
-        throw new Error('Vorheriger Themenblock muss erst bestanden werden')
+        return 'Vorheriger Themenblock muss erst bestanden werden'
     }
+
+    return null
 }
 
 // ============== EXAMS ==============
 
-export async function getExams() {
-    const user = await requireAuth()
+export async function getExams(): Promise<ActionResult<ReturnType<typeof mapExams>>> {
+    try {
+        const user = await requireAuth()
 
-    // Parallel queries for better performance
-    const [exams, passedBlocks] = await Promise.all([
-        prisma.exam.findMany({
-            orderBy: { order: 'asc' },
-            include: {
-                _count: { select: { questions: true } },
-                results: {
-                    where: { userId: user.id },
-                    orderBy: { score: 'desc' },
-                    take: 1
-                }
-            },
-            cacheStrategy: { ttl: 30 } // Cache exam list for 30 seconds
-        }),
-        prisma.examResult.findMany({
-            where: {
-                userId: user.id,
-                passed: true,
-                exam: { type: 'TOPIC_BLOCK' }
-            },
-            select: { examId: true }
-        })
-    ])
-
-    const passedBlockIds = new Set(passedBlocks.map(r => r.examId))
-
-    const topicBlocks = exams.filter(e => e.type === 'TOPIC_BLOCK')
-    const allBlocksPassed = topicBlocks.length > 0 && topicBlocks.every(b => passedBlockIds.has(b.id))
-
-    let previousBlockPassed = true
-    return exams.map(exam => {
-        let isUnlocked: boolean
-
-        if (exam.type === 'MAIN_EXAM') {
-            // Hauptprüfung: nur wenn ALLE Themenblöcke bestanden
-            isUnlocked = allBlocksPassed
-        } else {
-            // Themenblock: nur wenn vorheriger bestanden
-            isUnlocked = previousBlockPassed
-            previousBlockPassed = passedBlockIds.has(exam.id)
-        }
-
-        return { ...exam, isUnlocked }
-    })
-}
-
-export async function getExam(examId: string) {
-    const user = await requireAuth()
-
-    const exam = await prisma.exam.findUnique({
-        where: { id: examId },
-        include: { questions: true }
-    })
-
-    if (!exam) return null
-
-    await assertExamUnlocked(user.id, exam)
-
-    return exam
-}
-
-export async function submitExam(examId: string, answers: { [questionId: string]: number }) {
-    const user = await requireAuth()
-
-    const exam = await prisma.exam.findUnique({
-        where: { id: examId },
-        include: { questions: true }
-    })
-
-    if (!exam) throw new Error('Exam not found')
-    await assertExamUnlocked(user.id, exam)
-
-    let correctCount = 0
-    const totalQuestions = exam.questions.length
-
-    if (totalQuestions === 0) {
-        throw new Error('Exam has no questions')
-    }
-
-    exam.questions.forEach((q: { id: string; correct: number }) => {
-        if (answers[q.id] === q.correct) {
-            correctCount++
-        }
-    })
-
-    const score = Math.round((correctCount / totalQuestions) * 100)
-    const passed = score >= 50
-
-    const { result, xpAwarded } = await prisma.$transaction(async (tx) => {
-        let shouldAwardXp = false
-
-        if (passed) {
-            const alreadyPassed = await tx.examResult.findFirst({
+        // Parallel queries for better performance
+        const [exams, passedBlocks] = await Promise.all([
+            prisma.exam.findMany({
+                orderBy: { order: 'asc' },
+                include: {
+                    _count: { select: { questions: true } },
+                    results: {
+                        where: { userId: user.id },
+                        orderBy: { score: 'desc' },
+                        take: 1
+                    }
+                },
+                cacheStrategy: { ttl: 30 } // Cache exam list for 30 seconds
+            }),
+            prisma.examResult.findMany({
                 where: {
                     userId: user.id,
-                    examId,
-                    passed: true
+                    passed: true,
+                    exam: { type: 'TOPIC_BLOCK' }
                 },
-                select: { id: true }
+                select: { examId: true }
             })
+        ])
 
-            if (!alreadyPassed) {
-                shouldAwardXp = true
-                await tx.user.update({
-                    where: { id: user.id },
-                    data: { xp: { increment: 50 } }
-                })
-            }
-        }
+        const passedBlockIds = new Set(passedBlocks.map(r => r.examId))
 
-        const createdResult = await tx.examResult.create({
-            data: {
-                userId: user.id,
-                examId,
-                score,
-                passed
+        const topicBlocks = exams.filter(e => e.type === 'TOPIC_BLOCK')
+        const allBlocksPassed = topicBlocks.length > 0 && topicBlocks.every(b => passedBlockIds.has(b.id))
+
+        let previousBlockPassed = true
+        const mapped = exams.map(exam => {
+            let isUnlocked: boolean
+
+            if (exam.type === 'MAIN_EXAM') {
+                isUnlocked = allBlocksPassed
+            } else {
+                isUnlocked = previousBlockPassed
+                previousBlockPassed = passedBlockIds.has(exam.id)
             }
+
+            return { ...exam, isUnlocked }
         })
 
-        return { result: createdResult, xpAwarded: shouldAwardXp }
-    })
-
-    return { success: true, result, xpAwarded }
+        return success(mapped)
+    } catch (err) {
+        return error(translatePrismaError(err), 'INTERNAL')
+    }
 }
 
-export async function getExamResults() {
-    const user = await requireAuth()
-    return prisma.examResult.findMany({
-        where: { userId: user.id },
-        include: { exam: true },
-        orderBy: { completedAt: 'desc' }
-    })
+// Helper type for getExams return type inference
+type ExamWithUnlock = Awaited<ReturnType<typeof prisma.exam.findMany>> extends (infer U)[] ? (U & { isUnlocked: boolean })[] : never
+function mapExams(): ExamWithUnlock { throw new Error('type-only') }
+
+export async function getExam(examId: unknown): Promise<ActionResult<Awaited<ReturnType<typeof prisma.exam.findUnique>>>> {
+    try {
+        const user = await requireAuth()
+        const validatedId = validateInput(idSchema, examId)
+
+        const exam = await prisma.exam.findUnique({
+            where: { id: validatedId },
+            include: { questions: true }
+        })
+
+        if (!exam) {
+            return error('Prüfung nicht gefunden', 'NOT_FOUND')
+        }
+
+        const lockMessage = await assertExamUnlocked(user.id, exam)
+        if (lockMessage) {
+            return error(lockMessage, 'FORBIDDEN')
+        }
+
+        return success(exam)
+    } catch (err) {
+        return error(translatePrismaError(err), 'INTERNAL')
+    }
+}
+
+export async function submitExam(examId: unknown, answers: unknown): Promise<ActionResult<{ result: Awaited<ReturnType<typeof prisma.examResult.create>>; xpAwarded: boolean }>> {
+    try {
+        const user = await requireAuth()
+        const validated = validateInput(submitExamSchema, { examId, answers })
+
+        const exam = await prisma.exam.findUnique({
+            where: { id: validated.examId },
+            include: { questions: true }
+        })
+
+        if (!exam) {
+            return error('Prüfung nicht gefunden', 'NOT_FOUND')
+        }
+
+        const lockMessage = await assertExamUnlocked(user.id, exam)
+        if (lockMessage) {
+            return error(lockMessage, 'FORBIDDEN')
+        }
+
+        const { score, passed } = calculateExamScore({
+            questions: exam.questions,
+            answers: validated.answers,
+        })
+
+        const { result, xpAwarded } = await prisma.$transaction(async (tx) => {
+            let shouldAwardXp = false
+
+            if (passed) {
+                const alreadyPassed = await tx.examResult.findFirst({
+                    where: {
+                        userId: user.id,
+                        examId: validated.examId,
+                        passed: true
+                    },
+                    select: { id: true }
+                })
+
+                if (!alreadyPassed) {
+                    shouldAwardXp = true
+                    await tx.user.update({
+                        where: { id: user.id },
+                        data: { xp: { increment: 50 } }
+                    })
+                }
+            }
+
+            const createdResult = await tx.examResult.create({
+                data: {
+                    userId: user.id,
+                    examId: validated.examId,
+                    score,
+                    passed
+                }
+            })
+
+            return { result: createdResult, xpAwarded: shouldAwardXp }
+        })
+
+        return success({ result, xpAwarded })
+    } catch (err) {
+        return error(translatePrismaError(err), 'INTERNAL')
+    }
+}
+
+export async function getExamResults(): Promise<ActionResult<Awaited<ReturnType<typeof prisma.examResult.findMany>>>> {
+    try {
+        const user = await requireAuth()
+        const results = await prisma.examResult.findMany({
+            where: { userId: user.id },
+            include: { exam: true },
+            orderBy: { completedAt: 'desc' }
+        })
+        return success(results)
+    } catch (err) {
+        return error(translatePrismaError(err), 'INTERNAL')
+    }
 }

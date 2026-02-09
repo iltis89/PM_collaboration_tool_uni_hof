@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import styles from './error-boundary.module.css'
 
 export default function Error({
     error,
@@ -15,52 +16,21 @@ export default function Error({
     }, [error])
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '50vh',
-            padding: '2rem',
-            textAlign: 'center'
-        }}>
+        <div className={styles.container}>
             <span className="material-symbols-outlined" style={{ fontSize: '4rem', color: 'var(--error)', marginBottom: '1rem' }}>
                 error
             </span>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+            <h2 className={styles.heading}>
                 Fehler aufgetreten
             </h2>
-            <p style={{ color: 'var(--foreground-muted)', marginBottom: '2rem', maxWidth: '400px' }}>
+            <p className={styles.message}>
                 Beim Laden dieser Seite ist ein Fehler aufgetreten.
             </p>
-            <div style={{ display: 'flex', gap: '12px' }}>
-                <button
-                    onClick={reset}
-                    style={{
-                        padding: '12px 24px',
-                        background: 'var(--accent)',
-                        color: 'black',
-                        border: 'none',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        cursor: 'pointer'
-                    }}
-                >
+            <div className={styles.actions}>
+                <button onClick={reset} className={styles.retryButton}>
                     Erneut versuchen
                 </button>
-                <Link
-                    href="/dashboard"
-                    style={{
-                        padding: '12px 24px',
-                        background: 'var(--surface-highlight)',
-                        color: 'var(--foreground)',
-                        border: '1px solid var(--border)',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: '1rem',
-                        textDecoration: 'none'
-                    }}
-                >
+                <Link href="/dashboard" className={styles.dashboardLink}>
                     Zum Dashboard
                 </Link>
             </div>

@@ -35,20 +35,16 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
 
     useEffect(() => {
         getExam(examId)
-            .then(data => {
-                if (data) {
-                    setExam(data);
+            .then(result => {
+                if (result.success) {
+                    setExam(result.data as unknown as Exam);
+                } else if (result.code === 'FORBIDDEN') {
+                    router.push('/exam-prep');
                 }
                 setLoading(false);
             })
-            .catch((err) => {
-                // Redirect bei Zugriff auf gesperrte Prüfung
-                if (err.message?.includes('Themenblock') || err.message?.includes('bestanden')) {
-                    router.push('/exam-prep');
-                } else {
-                    console.error(err);
-                    setLoading(false);
-                }
+            .catch(() => {
+                setLoading(false);
             });
     }, [examId, router]);
 
@@ -56,13 +52,12 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
 
     async function handleSubmit() {
         if (!exam) return;
-        try {
-            await submitExam(exam.id, answers);
+        const result = await submitExam(exam.id, answers);
+        if (result.success) {
             alert('Lernmodul abgeschlossen! XP gutgeschrieben.');
             router.push('/exam-prep/history');
-        } catch (e) {
-            console.error(e);
-            alert('Fehler: ' + (e instanceof Error ? e.message : 'Unbekannter Fehler beim Speichern.'));
+        } else {
+            alert('Fehler: ' + result.error);
         }
     }
 

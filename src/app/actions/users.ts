@@ -2,27 +2,11 @@
 
 import { prisma } from '@/lib/prisma'
 import { hash } from 'bcryptjs'
-import { getCurrentUser } from './auth'
+import { requireAdmin } from '@/lib/auth-guards'
 import { success, error, type ActionResult } from '@/lib/action-result'
 import { translatePrismaError } from '@/lib/prisma-errors'
 import { createUserSchema, idSchema, validateInput } from '@/lib/validation'
 import type { User } from '@prisma/client'
-
-async function requireAuth() {
-    const user = await getCurrentUser()
-    if (!user) {
-        throw new Error('Nicht authentifiziert')
-    }
-    return user
-}
-
-async function requireAdmin() {
-    const user = await requireAuth()
-    if (user.role !== 'ADMIN') {
-        throw new Error('Keine Admin-Berechtigung')
-    }
-    return user
-}
 
 type SafeUser = Pick<User, 'id' | 'email' | 'name' | 'role' | 'xp' | 'level' | 'createdAt' | 'privacyAccepted' | 'privacyAcceptedAt'>
 
@@ -36,17 +20,20 @@ export async function getUsers(): Promise<SafeUser[]> {
 
 export async function getAdminStats() {
     await requireAdmin()
-    const userCount = await prisma.user.count({ where: { role: 'STUDENT' } });
-    const totalExams = await prisma.examResult.count();
-    const passedExams = await prisma.examResult.count({ where: { passed: true } });
-    const passRate = totalExams > 0 ? Math.round((passedExams / totalExams) * 100) : 0;
 
-    const topStudents = await prisma.user.findMany({
-        where: { role: 'STUDENT' },
-        orderBy: { xp: 'desc' },
-        take: 5,
-        select: { id: true, name: true, xp: true, level: true }
-    });
+    const [userCount, totalExams, passedExams, topStudents] = await Promise.all([
+        prisma.user.count({ where: { role: 'STUDENT' } }),
+        prisma.examResult.count(),
+        prisma.examResult.count({ where: { passed: true } }),
+        prisma.user.findMany({
+            where: { role: 'STUDENT' },
+            orderBy: { xp: 'desc' },
+            take: 5,
+            select: { id: true, name: true, xp: true, level: true }
+        }),
+    ])
+
+    const passRate = totalExams > 0 ? Math.round((passedExams / totalExams) * 100) : 0;
 
     return {
         userCount,

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import styles from './error-boundary.module.css'
 
 export default function GlobalError({
     error,
@@ -10,58 +11,24 @@ export default function GlobalError({
     reset: () => void
 }) {
     useEffect(() => {
-        // Log error to console (in production, send to error tracking service)
         console.error('Global error:', error)
     }, [error])
 
     return (
         <html>
             <body>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minHeight: '100vh',
-                    padding: '2rem',
-                    textAlign: 'center',
-                    fontFamily: 'system-ui, sans-serif',
-                    background: '#0a0a0a',
-                    color: '#ededed'
-                }}>
-                    <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>
+                <div className={styles.containerFull}>
+                    <h1 className={styles.headingLarge}>
                         Etwas ist schiefgelaufen
                     </h1>
-                    <p style={{ color: '#888', marginBottom: '2rem', maxWidth: '400px' }}>
+                    <p className={styles.messageDark}>
                         Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.
                     </p>
-                    <button
-                        onClick={reset}
-                        style={{
-                            padding: '12px 24px',
-                            background: '#22c55e',
-                            color: 'black',
-                            border: 'none',
-                            borderRadius: '8px',
-                            fontSize: '1rem',
-                            fontWeight: 600,
-                            cursor: 'pointer'
-                        }}
-                    >
+                    <button onClick={reset} className={styles.retryButtonGlobal}>
                         Erneut versuchen
                     </button>
                     {process.env.NODE_ENV === 'development' && (
-                        <pre style={{
-                            marginTop: '2rem',
-                            padding: '1rem',
-                            background: '#1a1a1a',
-                            borderRadius: '8px',
-                            fontSize: '0.8rem',
-                            color: '#ef4444',
-                            maxWidth: '100%',
-                            overflow: 'auto',
-                            textAlign: 'left'
-                        }}>
+                        <pre className={styles.devError}>
                             {error.message}
                         </pre>
                     )}

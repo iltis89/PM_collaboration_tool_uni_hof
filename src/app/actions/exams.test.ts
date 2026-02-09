@@ -58,7 +58,25 @@ describe('exams actions', () => {
         mockPrisma.exam.count.mockResolvedValueOnce(3)
         mockPrisma.examResult.count.mockResolvedValueOnce(2)
 
-        await expect(getExam('main-exam')).rejects.toThrow('Alle Themenblöcke müssen erst bestanden werden')
+        const result = await getExam('clr1234567890abcdefghijkl')
+
+        expect(result.success).toBe(false)
+        if (!result.success) {
+            expect(result.error).toBe('Alle Themenblöcke müssen erst bestanden werden')
+            expect(result.code).toBe('FORBIDDEN')
+        }
+    })
+
+    it('returns NOT_FOUND for missing exam', async () => {
+        mockPrisma.exam.findUnique.mockResolvedValueOnce(null)
+
+        const result = await getExam('clr1234567890abcdefghijkl')
+
+        expect(result.success).toBe(false)
+        if (!result.success) {
+            expect(result.error).toBe('Prüfung nicht gefunden')
+            expect(result.code).toBe('NOT_FOUND')
+        }
     })
 
     it('awards XP only once for a passed exam', async () => {
@@ -94,10 +112,12 @@ describe('exams actions', () => {
             },
         }))
 
-        const result = await submitExam('topic-1', { q1: 0, q2: 1 })
+        const result = await submitExam('clr1234567890abcdefghijkl', { q1: 0, q2: 1 })
 
         expect(result.success).toBe(true)
-        expect(result.xpAwarded).toBe(false)
+        if (result.success) {
+            expect(result.data.xpAwarded).toBe(false)
+        }
         expect(txUserUpdate).not.toHaveBeenCalled()
         expect(txExamResultCreate).toHaveBeenCalledTimes(1)
     })
@@ -132,14 +152,16 @@ describe('exams actions', () => {
             },
         }))
 
-        const result = await submitExam('topic-1', { q1: 0 })
+        const result = await submitExam('clr1234567890abcdefghijkl', { q1: 0 })
 
         expect(result.success).toBe(true)
-        expect(result.xpAwarded).toBe(true)
+        if (result.success) {
+            expect(result.data.xpAwarded).toBe(true)
+        }
         expect(txUserUpdate).toHaveBeenCalledTimes(1)
     })
 
-    it('rejects submitting exams without questions', async () => {
+    it('returns error for exams without questions', async () => {
         mockPrisma.exam.findUnique.mockResolvedValueOnce({
             id: 'topic-empty',
             type: 'TOPIC_BLOCK',
@@ -147,6 +169,21 @@ describe('exams actions', () => {
             questions: [],
         })
 
-        await expect(submitExam('topic-empty', {})).rejects.toThrow('Exam has no questions')
+        // calculateExamScore throws for 0 questions, which gets caught by the try/catch
+        const result = await submitExam('clr1234567890abcdefghijkl', {})
+
+        expect(result.success).toBe(false)
+        if (!result.success) {
+            expect(result.error).toBe('Exam has no questions')
+        }
+    })
+
+    it('rejects invalid examId format', async () => {
+        const result = await submitExam('not-a-valid-id', { q1: 0 })
+
+        expect(result.success).toBe(false)
+        if (!result.success) {
+            expect(result.error).toContain('Ungültige')
+        }
     })
 })

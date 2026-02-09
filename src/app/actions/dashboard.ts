@@ -1,30 +1,67 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getCurrentUser } from './auth'
+import { requireAuth } from '@/lib/auth-guards'
+import { success, error, type ActionResult } from '@/lib/action-result'
+import { translatePrismaError } from '@/lib/prisma-errors'
 
-export async function getDashboardData() {
-    const user = await getCurrentUser()
-    if (!user) return null
+interface DashboardData {
+    user: NonNullable<Awaited<ReturnType<typeof requireAuth>>>
+    upcomingLectures: {
+        id: string
+        title: string
+        startTime: Date
+        room: string | null
+        professor: string | null
+    }[]
+    latestNews: {
+        id: string
+        title: string
+        content: string
+        createdAt: Date
+    } | null
+}
 
-    const upcomingLectures = await prisma.lecture.findMany({
-        where: {
-            startTime: {
-                gte: new Date()
-            }
-        },
-        orderBy: {
-            startTime: 'asc'
-        }
-    })
+export async function getDashboardData(): Promise<ActionResult<DashboardData>> {
+    try {
+        const user = await requireAuth()
 
-    const latestNews = await prisma.news.findFirst({
-        orderBy: { createdAt: 'desc' }
-    })
+        const now = new Date()
+        const [upcomingLectures, latestNews] = await Promise.all([
+            prisma.lecture.findMany({
+                where: {
+                    startTime: {
+                        gte: now
+                    }
+                },
+                orderBy: {
+                    startTime: 'asc'
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    startTime: true,
+                    room: true,
+                    professor: true,
+                }
+            }),
+            prisma.news.findFirst({
+                orderBy: { createdAt: 'desc' },
+                select: {
+                    id: true,
+                    title: true,
+                    content: true,
+                    createdAt: true,
+                }
+            })
+        ])
 
-    return {
-        user,
-        upcomingLectures,
-        latestNews
+        return success({
+            user,
+            upcomingLectures,
+            latestNews
+        })
+    } catch (err) {
+        return error(translatePrismaError(err), 'INTERNAL')
     }
 }

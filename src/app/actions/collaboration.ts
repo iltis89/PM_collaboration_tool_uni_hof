@@ -1,23 +1,16 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { getCurrentUser } from './auth'
+import { requireAuth } from '@/lib/auth-guards'
 import { success, error, type ActionResult } from '@/lib/action-result'
 import { translatePrismaError } from '@/lib/prisma-errors'
 import { createForumPostSchema, createChatMessageSchema, idSchema, validateInput } from '@/lib/validation'
 import type { Thread, Message, CourseChatMessage } from '@prisma/client'
 
-async function requireAuth() {
-    const user = await getCurrentUser()
-    if (!user) {
-        throw new Error('Nicht authentifiziert')
-    }
-    return user
-}
-
 // ============== THREADS ==============
 
 export async function getThreads() {
+    await requireAuth()
     return prisma.thread.findMany({
         include: {
             author: { select: { id: true, name: true } },
@@ -28,6 +21,7 @@ export async function getThreads() {
 }
 
 export async function getThread(threadId: unknown) {
+    await requireAuth()
     const validatedId = validateInput(idSchema, threadId)
     return prisma.thread.findUnique({
         where: { id: validatedId },
@@ -183,6 +177,7 @@ export async function deleteMessage(messageId: unknown): Promise<ActionResult<{ 
 // ============== COURSE CHAT ==============
 
 export async function getCourseMessages() {
+    await requireAuth()
     return prisma.courseChatMessage.findMany({
         include: {
             author: { select: { id: true, name: true } }

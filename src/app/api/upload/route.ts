@@ -21,6 +21,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
                 return {
                     allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/x-m4a'],
+                    maximumSizeInBytes: 10 * 1024 * 1024, // 10 MB limit
                     addRandomSuffix: true, // Prevent filename conflicts
                     tokenPayload: JSON.stringify({}),
                 };

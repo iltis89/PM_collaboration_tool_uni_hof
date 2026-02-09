@@ -22,7 +22,9 @@ export default function ExamPrep() {
     const router = useRouter();
 
     useEffect(() => {
-        getExams().then(setExams);
+        getExams().then(result => {
+            if (result.success) setExams(result.data as unknown as ExamListItem[]);
+        });
     }, []);
 
     return (

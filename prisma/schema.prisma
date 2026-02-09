@@ -21,7 +21,6 @@ model User {
   streak    Int       @default(0)
   privacyAccepted   Boolean   @default(false)
   privacyAcceptedAt DateTime?
-  progress  Progress[]
   threads   Thread[]
   messages  Message[]
   examResults ExamResult[]
@@ -112,8 +111,8 @@ model QuizQuestion {
   correct  Int      // Index of correct answer (0-based)
   category String?  // e.g., "Layer 01", "Layer 02"
   explanation String? // Explanation for the correct answer
-  Exam     Exam?    @relation(fields: [examId], references: [id])
-  examId   String?
+  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  examId   String
 }
 
 model ExamResult {
@@ -127,17 +126,7 @@ model ExamResult {
   completedAt DateTime @default(now())
 }
 
-model Progress {
-  id          String    @id @default(cuid())
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quizId      String?
-  materialId  String?
-  completed   Boolean   @default(false)
-  score       Int?
-  completedAt DateTime?
-  createdAt   DateTime  @default(now())
-}
+
 
 // ============== COLLABORATION ==============
 

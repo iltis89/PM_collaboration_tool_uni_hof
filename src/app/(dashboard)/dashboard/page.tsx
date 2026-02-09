@@ -5,14 +5,13 @@ import NewsCard from '@/components/NewsCard';
 import { getDashboardData } from '@/app/actions';
 
 export default async function Dashboard() {
-    const data = await getDashboardData();
-    const user = data?.user;
-    const upcomingLectures = data?.upcomingLectures || [];
-    const latestNews = data?.latestNews;
+    const result = await getDashboardData();
 
-    if (!user) {
+    if (!result.success) {
         return <div>Bitte anmelden.</div>;
     }
+
+    const { user, upcomingLectures, latestNews } = result.data;
 
     // Calculate level progress (simple logic for now)
     const xpForNextLevel = user.level * 1000;
