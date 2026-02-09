@@ -48,25 +48,13 @@ export default function ExamPrep() {
                             transition: 'all 0.3s ease'
                         }}
                     >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '16px' }}>
-                            <div>
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '8px' }}>
-                                    {exam.title}
-                                </h2>
-                                <p style={{ color: 'var(--foreground-muted)', marginBottom: '16px' }}>
-                                    {exam.description}
-                                </p>
-                            </div>
-                            <div style={{
-                                background: exam.isUnlocked ? 'var(--surface-highlight)' : 'transparent',
-                                padding: '8px 16px',
-                                borderRadius: '100px',
-                                fontSize: '0.9rem',
-                                fontWeight: 600,
-                                color: exam.isUnlocked ? 'var(--accent)' : 'var(--foreground-muted)'
-                            }}>
-                                {exam.duration} Min.
-                            </div>
+                        <div style={{ marginBottom: '16px' }}>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '8px' }}>
+                                {exam.title}
+                            </h2>
+                            <p style={{ color: 'var(--foreground-muted)', marginBottom: '16px' }}>
+                                {exam.description}
+                            </p>
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px' }}>
