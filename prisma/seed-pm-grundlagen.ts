@@ -48,11 +48,11 @@ async function main() {
             question: 'Was sind laut Definition die wesentlichen Merkmale, die ein Projekt von einer Routineaufgabe unterscheiden?',
             options: [
                 'Es ist ein fortlaufender Prozess ohne definiertes Ende.',
-                'Ein Projekt zeichnet sich durch Einmaligkeit, zeitliche Befristung, Komplexität, Neuartigkeit und definierte Ziele aus.',
                 'Ein Projekt ist jede Aufgabe, die länger als zwei Tage dauert.',
+                'Ein Projekt zeichnet sich durch Einmaligkeit, zeitliche Befristung, Komplexität, Neuartigkeit und definierte Ziele aus.',
                 'Projekte sind Aufgaben, die ausschließlich von externen Beratern durchgeführt werden.'
             ],
-            correct: 1,
+            correct: 2,
             category: 'Projektdefinition',
             explanation: 'Laut Skript (Seite 9–10) ist ein Projekt ein Vorhaben, das durch die Einmaligkeit der Bedingungen gekennzeichnet ist. Dazu gehören eine konkrete Zielvorgabe sowie zeitliche, finanzielle und personelle Begrenzungen. Es unterscheidet sich damit von alltäglichen Routineaufgaben.'
         },
@@ -87,11 +87,11 @@ async function main() {
             question: 'Woraus entstehen Projektideen (Ansatzpunkt „Auslöser") häufig?',
             options: [
                 'Ausschließlich durch interne Anweisungen der Geschäftsführung.',
-                'Durch technische Entwicklungen, Kundenbedürfnisse (Marketingkonzepte) oder die Marktsituation (Wettbewerb).',
+                'Durch das Kopieren alter Projekte ohne Anpassung.',
                 'Ideen entstehen nur, wenn das Budget am Jahresende noch nicht aufgebraucht ist.',
-                'Durch das Kopieren alter Projekte ohne Anpassung.'
+                'Durch technische Entwicklungen, Kundenbedürfnisse (Marketingkonzepte) oder die Marktsituation (Wettbewerb).'
             ],
-            correct: 1,
+            correct: 3,
             category: 'Projektidee & Auslöser',
             explanation: 'Im Abschnitt „Wie entsteht eine Projektidee" (Seite 20) werden als Ansatzpunkte technische Entwicklungen, Kundenbedürfnisse (Marketingkonzepte) und die Marktsituation (Reaktion auf Wettbewerb) genannt.'
         },
@@ -151,12 +151,12 @@ async function main() {
         {
             question: 'Was kennzeichnet einen „Meilenstein" im Projektplan?',
             options: [
-                'Er hat eine zeitliche Dauer von mindestens einer Woche.',
                 'Er ist ein Ereignis oder Zeitpunkt, der wesentliche Zwischenergebnisse markiert und Phasen trennt (keine zeitliche Dauer).',
+                'Er hat eine zeitliche Dauer von mindestens einer Woche.',
                 'Er beschreibt die maximalen Kosten eines Arbeitspakets.',
                 'Er ist ein Synonym für das Projektende.'
             ],
-            correct: 1,
+            correct: 0,
             category: 'Meilensteine',
             explanation: 'Ebenfalls auf Seite 28 wird definiert: „Ein Meilenstein stellt keine zeitliche Dauer, sondern ein Ereignis dar." Meilensteine trennen die einzelnen Phasen voneinander und markieren wesentliche Zwischenergebnisse.'
         },
@@ -190,12 +190,12 @@ async function main() {
         {
             question: 'Welche drei Hauptrollen gibt es im Scrum-Team?',
             options: [
-                'Projektleiter, Assistent, Praktikant.',
-                'Manager, Designer, Controller.',
                 'Product Owner, Scrum Master, Entwicklungsteam.',
+                'Manager, Designer, Controller.',
+                'Projektleiter, Assistent, Praktikant.',
                 'Chef, Kunde, Lieferant.'
             ],
-            correct: 2,
+            correct: 0,
             category: 'Scrum-Rollen',
             explanation: 'Seite 42 beschreibt die drei Hauptrollen im Scrum-Team: Product Owner (verantwortlich für Produkt & Backlog), Scrum Master (unterstützt Team & Prozess) und Entwicklungsteam (Umsetzung).'
         },
@@ -204,11 +204,11 @@ async function main() {
             question: 'Was ist das Kernprinzip der Kanban-Methode?',
             options: [
                 'Arbeiten in festen Sprints von 2–4 Wochen.',
-                'Visualisierung des Arbeitsflusses (z.B. Board) und Limitierung der parallelen Aufgaben (WIP – Work in Progress).',
                 'Ein strikter Projektplan, der Monate im Voraus festgelegt wird.',
+                'Visualisierung des Arbeitsflusses (z.B. Board) und Limitierung der parallelen Aufgaben (WIP – Work in Progress).',
                 'Tägliche Meetings, die mindestens zwei Stunden dauern.'
             ],
-            correct: 1,
+            correct: 2,
             category: 'Kanban',
             explanation: 'Auf Seite 43 wird Kanban erklärt. Kernpunkte sind die Visualisierung des Arbeitsflusses (Kanban-Board) und die Limitierung der „Work in Progress" (WIP), um Überlastung zu vermeiden. Es gibt keine festen Sprints wie bei Scrum.'
         }

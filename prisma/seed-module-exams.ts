@@ -19,8 +19,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Welche Phase folgt auf die Projektinitierung?",
-                options: ["Abschluss", "Durchführung", "Planung", "Monitoring"],
-                correct: 2,
+                options: ["Planung", "Durchführung", "Abschluss", "Monitoring"],
+                correct: 0,
                 category: "Projektstart",
                 explanation: "Nach der Initiierung folgt die Planungsphase, in der Scope, Zeit, Kosten und Ressourcen definiert werden."
             }
@@ -28,8 +28,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was gehört NICHT zur Projektdurchführung?",
-                options: ["Teamführung", "Qualitätssicherung", "Lessons Learned dokumentieren", "Ressourcenmanagement"],
-                correct: 2,
+                options: ["Teamführung", "Qualitätssicherung", "Ressourcenmanagement", "Lessons Learned dokumentieren"],
+                correct: 3,
                 category: "Durchführung",
                 explanation: "Lessons Learned werden typischerweise in der Abschlussphase dokumentiert, nicht während der Durchführung."
             }
@@ -46,8 +46,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was beschreibt der Begriff 'Scope Creep'?",
-                options: ["Budgetüberschreitung", "Unkontrollierte Ausweitung des Projektumfangs", "Zeitverzug", "Teamfluktuation"],
-                correct: 1,
+                options: ["Budgetüberschreitung", "Zeitverzug", "Unkontrollierte Ausweitung des Projektumfangs", "Teamfluktuation"],
+                correct: 2,
                 category: "Durchführung",
                 explanation: "Scope Creep bezeichnet die schleichende, unkontrollierte Erweiterung des Projektumfangs ohne formalen Change Request."
             }
@@ -73,8 +73,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Wer ist für die Genehmigung des Projektauftrags verantwortlich?",
-                options: ["Projektmanager", "Projektsponsor", "Teammitglied", "Qualitätsmanager"],
-                correct: 1,
+                options: ["Projektmanager", "Qualitätsmanager", "Teammitglied", "Projektsponsor"],
+                correct: 3,
                 category: "Projektstart",
                 explanation: "Der Projektsponsor (Auftraggeber) genehmigt den Projektauftrag und stellt die Ressourcen bereit."
             }
@@ -91,8 +91,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was bedeutet 'Baseline' im Projektmanagement?",
-                options: ["Projektende", "Genehmigter Referenzplan", "Risikoschwelle", "Teamstruktur"],
-                correct: 1,
+                options: ["Projektende", "Risikoschwelle", "Genehmigter Referenzplan", "Teamstruktur"],
+                correct: 2,
                 category: "Durchführung",
                 explanation: "Die Baseline ist der genehmigte, ursprüngliche Plan (Scope, Zeit, Kosten), gegen den der Fortschritt gemessen wird."
             }
@@ -125,8 +125,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist ein Sprint in Scrum?",
-                options: ["Ein Wettlauf", "Ein zeitbegrenzter Entwicklungszyklus (2-4 Wochen)", "Ein Dokument", "Eine Rolle"],
-                correct: 1,
+                options: ["Ein Wettlauf", "Eine Rolle", "Ein Dokument", "Ein zeitbegrenzter Entwicklungszyklus (2-4 Wochen)"],
+                correct: 3,
                 category: "Scrum",
                 explanation: "Ein Sprint ist eine Timebox von 2-4 Wochen, in der ein fertiges, nutzbares Produktinkrement erstellt wird."
             }
@@ -134,8 +134,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was beschreibt das 'Wasserfall-Modell'?",
-                options: ["Iterative Entwicklung", "Streng sequentielle Projektphasen", "Agile Teamarbeit", "Kontinuierliche Lieferung"],
-                correct: 1,
+                options: ["Streng sequentielle Projektphasen", "Iterative Entwicklung", "Agile Teamarbeit", "Kontinuierliche Lieferung"],
+                correct: 0,
                 category: "Klassisch",
                 explanation: "Das Wasserfall-Modell durchläuft Projektphasen streng nacheinander – jede Phase muss abgeschlossen sein, bevor die nächste beginnt."
             }
@@ -161,8 +161,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist ein Product Backlog?",
-                options: ["Fehlerprotokoll", "Priorisierte Liste aller Anforderungen", "Teamkalender", "Budgetübersicht"],
-                correct: 1,
+                options: ["Priorisierte Liste aller Anforderungen", "Fehlerprotokoll", "Teamkalender", "Budgetübersicht"],
+                correct: 0,
                 category: "Scrum",
                 explanation: "Das Product Backlog ist eine geordnete, priorisierte Liste aller Features und Anforderungen für das Produkt."
             }
@@ -170,8 +170,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Wann ist agiles PM besonders geeignet?",
-                options: ["Bei festen, unveränderlichen Anforderungen", "Bei hoher Unsicherheit und sich ändernden Anforderungen", "Bei sehr großen Teams", "Bei kurzen Projekten unter 1 Woche"],
-                correct: 1,
+                options: ["Bei festen, unveränderlichen Anforderungen", "Bei kurzen Projekten unter 1 Woche", "Bei sehr großen Teams", "Bei hoher Unsicherheit und sich ändernden Anforderungen"],
+                correct: 3,
                 category: "Agile vs. Klassisch",
                 explanation: "Agile Methoden eignen sich besonders, wenn Anforderungen unklar sind und sich häufig ändern können."
             }
@@ -188,8 +188,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist der Unterschied zwischen Scrum und Kanban?",
-                options: ["Kanban hat keine Sprints/Timeboxes", "Scrum hat kein Board", "Kanban ist nur für Hardware", "Es gibt keinen Unterschied"],
-                correct: 0,
+                options: ["Kanban ist nur für Hardware", "Scrum hat kein Board", "Kanban hat keine Sprints/Timeboxes", "Es gibt keinen Unterschied"],
+                correct: 2,
                 category: "Agile vs. Klassisch",
                 explanation: "Kanban arbeitet mit kontinuierlichem Fluss ohne feste Iterationen, während Scrum zeitbegrenzte Sprints nutzt."
             }
@@ -197,8 +197,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist eine Sprint Retrospektive?",
-                options: ["Sprint-Planung", "Meeting zur Prozessverbesserung nach dem Sprint", "Tägliches Standup", "Produktdemo"],
-                correct: 1,
+                options: ["Sprint-Planung", "Produktdemo", "Tägliches Standup", "Meeting zur Prozessverbesserung nach dem Sprint"],
+                correct: 3,
                 category: "Scrum",
                 explanation: "In der Retrospektive reflektiert das Team am Ende des Sprints, was gut lief und was verbessert werden kann."
             }
@@ -222,8 +222,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Welches Modell beschreibt die Phasen der Teambildung?",
-                options: ["RACI-Matrix", "Tuckman-Modell", "SWOT-Analyse", "Eisenhower-Matrix"],
-                correct: 1,
+                options: ["RACI-Matrix", "Eisenhower-Matrix", "SWOT-Analyse", "Tuckman-Modell"],
+                correct: 3,
                 category: "Team Management",
                 explanation: "Das Tuckman-Modell beschreibt die Phasen: Forming, Storming, Norming, Performing und Adjourning."
             }
@@ -231,8 +231,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was bedeutet das 'R' in RACI?",
-                options: ["Reviewed", "Responsible", "Required", "Requested"],
-                correct: 1,
+                options: ["Reviewed", "Required", "Responsible", "Requested"],
+                correct: 2,
                 category: "Kommunikation",
                 explanation: "R = Responsible – die Person, die die Arbeit ausführt. A = Accountable, C = Consulted, I = Informed."
             }
@@ -249,8 +249,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Welche Konfliktlösungsstrategie ist langfristig am erfolgreichsten?",
-                options: ["Vermeidung", "Durchsetzung", "Kooperation (Win-Win)", "Nachgeben"],
-                correct: 2,
+                options: ["Kooperation (Win-Win)", "Durchsetzung", "Vermeidung", "Nachgeben"],
+                correct: 0,
                 category: "Team Management",
                 explanation: "Kooperation führt zu nachhaltigen Lösungen, da beide Parteien ihre Interessen einbringen und einen Konsens finden."
             }
@@ -258,8 +258,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist die 'Storming'-Phase im Tuckman-Modell?",
-                options: ["Teambildung", "Konfliktphase", "Leistungsphase", "Auflösung"],
-                correct: 1,
+                options: ["Teambildung", "Auflösung", "Leistungsphase", "Konfliktphase"],
+                correct: 3,
                 category: "Team Management",
                 explanation: "In der Storming-Phase entstehen Konflikte, da Teammitglieder unterschiedliche Meinungen und Arbeitsstile haben."
             }
@@ -276,8 +276,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist ein Stakeholder-Register?",
-                options: ["Finanzübersicht", "Dokumentation aller Projektbeteiligten und deren Interessen", "Teamliste", "Risikoliste"],
-                correct: 1,
+                options: ["Dokumentation aller Projektbeteiligten und deren Interessen", "Finanzübersicht", "Teamliste", "Risikoliste"],
+                correct: 0,
                 category: "Kommunikation",
                 explanation: "Das Stakeholder-Register erfasst alle Stakeholder, ihre Interessen, Einfluss und Kommunikationsbedürfnisse."
             }
@@ -285,8 +285,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Welcher Führungsstil eignet sich für ein erfahrenes, motiviertes Team?",
-                options: ["Autoritär", "Delegierend", "Direktiv", "Mikromanagement"],
-                correct: 1,
+                options: ["Autoritär", "Direktiv", "Delegierend", "Mikromanagement"],
+                correct: 2,
                 category: "Team Management",
                 explanation: "Ein delegierender Führungsstil gibt erfahrenen Teams Autonomie und Vertrauen für selbstständiges Arbeiten."
             }
@@ -303,8 +303,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Wie viele Kommunikationskanäle gibt es bei einem Team von 5 Personen?",
-                options: ["5", "10", "15", "20"],
-                correct: 1,
+                options: ["5", "20", "15", "10"],
+                correct: 3,
                 category: "Kommunikation",
                 explanation: "Die Formel lautet n*(n-1)/2. Bei 5 Personen: 5*4/2 = 10 Kommunikationskanäle."
             }
@@ -328,8 +328,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Wofür wird ein Gantt-Diagramm verwendet?",
-                options: ["Kostenanalyse", "Zeitplanung und Visualisierung von Aufgaben", "Risikoanalyse", "Teamorganisation"],
-                correct: 1,
+                options: ["Kostenanalyse", "Risikoanalyse", "Zeitplanung und Visualisierung von Aufgaben", "Teamorganisation"],
+                correct: 2,
                 category: "Tools",
                 explanation: "Ein Gantt-Diagramm visualisiert Projektaufgaben auf einer Zeitachse mit Start- und Endterminen sowie Abhängigkeiten."
             }
@@ -346,8 +346,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist der Zweck einer SWOT-Analyse?",
-                options: ["Zeitplanung", "Strategische Stärken-Schwächen-Analyse", "Budgetkontrolle", "Qualitätsmessung"],
-                correct: 1,
+                options: ["Zeitplanung", "Qualitätsmessung", "Budgetkontrolle", "Strategische Stärken-Schwächen-Analyse"],
+                correct: 3,
                 category: "Tools",
                 explanation: "SWOT analysiert Strengths, Weaknesses, Opportunities und Threats für strategische Entscheidungen."
             }
@@ -364,8 +364,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist ein Netzplan (CPM)?",
-                options: ["Organigramm", "Grafische Darstellung von Aufgabenabhängigkeiten", "Kostenübersicht", "Kommunikationsplan"],
-                correct: 1,
+                options: ["Grafische Darstellung von Aufgabenabhängigkeiten", "Organigramm", "Kostenübersicht", "Kommunikationsplan"],
+                correct: 0,
                 category: "Tools",
                 explanation: "Ein Netzplan zeigt die logischen Abhängigkeiten zwischen Aufgaben und ermöglicht die Berechnung des kritischen Pfads."
             }
@@ -382,8 +382,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Wofür wird eine Risikomatrix verwendet?",
-                options: ["Zeitplanung", "Bewertung von Risiken nach Wahrscheinlichkeit und Auswirkung", "Teamzuordnung", "Budgetverteilung"],
-                correct: 1,
+                options: ["Zeitplanung", "Budgetverteilung", "Teamzuordnung", "Bewertung von Risiken nach Wahrscheinlichkeit und Auswirkung"],
+                correct: 3,
                 category: "Tools",
                 explanation: "Die Risikomatrix ordnet Risiken nach Eintrittswahrscheinlichkeit und Auswirkung ein, um Prioritäten zu setzen."
             }
@@ -391,8 +391,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was ist WIP-Limit in Kanban?",
-                options: ["Maximale Projektdauer", "Maximale Anzahl paralleler Aufgaben", "Budgetobergrenze", "Teamgröße"],
-                correct: 1,
+                options: ["Maximale Anzahl paralleler Aufgaben", "Maximale Projektdauer", "Budgetobergrenze", "Teamgröße"],
+                correct: 0,
                 category: "Tools",
                 explanation: "WIP (Work in Progress) Limit begrenzt die Anzahl gleichzeitiger Aufgaben, um Überlastung zu vermeiden."
             }
@@ -400,8 +400,8 @@ async function main() {
         prisma.quizQuestion.create({
             data: {
                 question: "Was zeigt ein Burn-Down-Chart?",
-                options: ["Budgetverbrauch", "Verbleibende Arbeit über die Zeit", "Teamperformance", "Risikoentwicklung"],
-                correct: 1,
+                options: ["Budgetverbrauch", "Teamperformance", "Verbleibende Arbeit über die Zeit", "Risikoentwicklung"],
+                correct: 2,
                 category: "Tools",
                 explanation: "Ein Burn-Down-Chart zeigt, wie viel Arbeit noch übrig ist und ob das Team im Zeitplan liegt."
             }
