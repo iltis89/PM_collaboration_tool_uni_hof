@@ -15,9 +15,9 @@ type User = {
 } | null;
 
 const baseNavItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
+    { name: 'Übersicht', href: '/dashboard', icon: 'dashboard' },
     { name: 'Materialien', href: '/materials', icon: 'folder' },
-    { name: 'Audio Learning', href: '/audio-learning', icon: 'headphones' },
+    { name: 'Audio-Lernen', href: '/audio-learning', icon: 'headphones' },
     { name: 'Kollaboration', href: '/collaboration', icon: 'chat_bubble' },
     { name: 'Prüfung', href: '/exam-prep', icon: 'school' },
 ];
@@ -47,7 +47,7 @@ export default function Sidebar() {
 
     // Only show Admin link if user is ADMIN
     const navItems = user?.role === 'ADMIN'
-        ? [...baseNavItems, { name: 'Admin', href: '/admin', icon: 'settings' }]
+        ? [...baseNavItems, { name: 'Verwaltung', href: '/admin', icon: 'settings' }]
         : baseNavItems;
 
     return (
