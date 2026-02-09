@@ -24,6 +24,7 @@ model User {
   threads   Thread[]
   messages  Message[]
   examResults ExamResult[]
+  progress  Progress[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   mustChangePassword Boolean @default(false)
@@ -111,8 +112,8 @@ model QuizQuestion {
   correct  Int      // Index of correct answer (0-based)
   category String?  // e.g., "Layer 01", "Layer 02"
   explanation String? // Explanation for the correct answer
-  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
-  examId   String
+  exam     Exam?    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  examId   String?
 }
 
 model ExamResult {
@@ -182,4 +183,15 @@ model CourseChatMessage {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topicId   String
+  completed Boolean  @default(false)
+  score     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
