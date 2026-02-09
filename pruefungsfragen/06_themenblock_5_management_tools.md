@@ -1,6 +1,6 @@
 # Themenblock 5: Management Tools
 
-> **10 Fragen** | **15 Min.** | Gantt, Kanban, SWOT, Earned Value – die wichtigsten PM-Werkzeuge
+> **14 Fragen** | **18 Min.** | Gantt, Kanban, SWOT, Earned Value – die wichtigsten PM-Werkzeuge
 
 ---
 
@@ -8,8 +8,8 @@
 
 **1. Wofür wird ein Gantt-Diagramm verwendet?**
 - a) Kostenanalyse
-- ✅ b) Zeitplanung und Visualisierung von Aufgaben
-- c) Risikoanalyse
+- b) Risikoanalyse
+- ✅ c) Zeitplanung und Visualisierung von Aufgaben
 - d) Teamorganisation
 
 > 💡 Ein Gantt-Diagramm visualisiert Projektaufgaben auf einer Zeitachse mit Start- und Endterminen sowie Abhängigkeiten.
@@ -24,9 +24,9 @@
 
 **3. Was ist der Zweck einer SWOT-Analyse?**
 - a) Zeitplanung
-- ✅ b) Strategische Stärken-Schwächen-Analyse
+- b) Qualitätsmessung
 - c) Budgetkontrolle
-- d) Qualitätsmessung
+- ✅ d) Strategische Stärken-Schwächen-Analyse
 
 > 💡 SWOT analysiert Strengths, Weaknesses, Opportunities und Threats für strategische Entscheidungen.
 
@@ -39,8 +39,8 @@
 > 💡 Der Earned Value zeigt den Wert der tatsächlich erledigten Arbeit basierend auf dem ursprünglichen Budget.
 
 **5. Was ist ein Netzplan (CPM)?**
-- a) Organigramm
-- ✅ b) Grafische Darstellung von Aufgabenabhängigkeiten
+- ✅ a) Grafische Darstellung von Aufgabenabhängigkeiten
+- b) Organigramm
 - c) Kostenübersicht
 - d) Kommunikationsplan
 
@@ -56,15 +56,15 @@
 
 **7. Wofür wird eine Risikomatrix verwendet?**
 - a) Zeitplanung
-- ✅ b) Bewertung von Risiken nach Wahrscheinlichkeit und Auswirkung
+- b) Budgetverteilung
 - c) Teamzuordnung
-- d) Budgetverteilung
+- ✅ d) Bewertung von Risiken nach Wahrscheinlichkeit und Auswirkung
 
 > 💡 Die Risikomatrix ordnet Risiken nach Eintrittswahrscheinlichkeit und Auswirkung ein, um Prioritäten zu setzen.
 
 **8. Was ist WIP-Limit in Kanban?**
-- a) Maximale Projektdauer
-- ✅ b) Maximale Anzahl paralleler Aufgaben
+- ✅ a) Maximale Anzahl paralleler Aufgaben
+- b) Maximale Projektdauer
 - c) Budgetobergrenze
 - d) Teamgröße
 
@@ -72,8 +72,8 @@
 
 **9. Was zeigt ein Burn-Down-Chart?**
 - a) Budgetverbrauch
-- ✅ b) Verbleibende Arbeit über die Zeit
-- c) Teamperformance
+- b) Teamperformance
+- ✅ c) Verbleibende Arbeit über die Zeit
 - d) Risikoentwicklung
 
 > 💡 Ein Burn-Down-Chart zeigt, wie viel Arbeit noch übrig ist und ob das Team im Zeitplan liegt.
@@ -85,3 +85,39 @@
 - d) Beide messen Budget
 
 > 💡 SPI (Schedule Performance Index) misst die Zeitleistung, CPI (Cost Performance Index) misst die Kostenleistung.
+
+---
+
+## Neue Fragen (inkl. Mehrfachauswahl)
+
+**11. 🔲 Welche der folgenden sind typische Bestandteile einer SWOT-Analyse? (Mehrfachauswahl)**
+- ✅ a) Stärken (Strengths)
+- b) Wünsche (Wishes)
+- ✅ c) Chancen (Opportunities)
+- ✅ d) Risiken (Threats)
+
+> 💡 SWOT steht für Strengths, Weaknesses, Opportunities, Threats. 'Wünsche' (Wishes) gehört nicht dazu – das W steht für Weaknesses (Schwächen).
+
+**12. 🔲 Welche Kennzahlen gehören zum Earned Value Management? (Mehrfachauswahl)**
+- ✅ a) Planned Value (PV)
+- b) Team Velocity (TV)
+- ✅ c) Actual Cost (AC)
+- ✅ d) Earned Value (EV)
+
+> 💡 Die drei Kernkennzahlen des EVM sind Planned Value (PV), Actual Cost (AC) und Earned Value (EV). 'Team Velocity' ist ein Scrum-Konzept.
+
+**13. Was ist der Unterschied zwischen einem Gantt-Diagramm und einem Netzplan?**
+- a) Es gibt keinen Unterschied
+- ✅ b) Der Netzplan zeigt Abhängigkeiten, das Gantt-Diagramm die Zeitachse
+- c) Das Gantt-Diagramm ist nur für agile Projekte
+- d) Der Netzplan zeigt nur Kosten
+
+> 💡 Ein Netzplan visualisiert logische Abhängigkeiten zwischen Vorgängen, während ein Gantt-Diagramm Aufgaben auf einer Zeitachse darstellt. Beide ergänzen sich.
+
+**14. Was bedeutet ein CPI von 0,8?**
+- a) Das Projekt liegt 20% unter Budget
+- ✅ b) Das Projekt liegt 20% über Budget
+- c) Das Projekt ist zu 80% fertig
+- d) 80% der Aufgaben sind abgeschlossen
+
+> 💡 CPI = EV/AC. Ein CPI von 0,8 bedeutet: Für jeden ausgegebenen Euro wurden nur 80 Cent Wert geschaffen – das Projekt liegt also 20% über Budget.

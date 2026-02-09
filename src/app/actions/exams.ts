@@ -10,7 +10,7 @@ import { z } from 'zod'
 
 const submitExamSchema = z.object({
     examId: z.string().cuid('Ungültige Exam-ID'),
-    answers: z.record(z.string(), z.number()),
+    answers: z.record(z.string(), z.array(z.number())),
 })
 
 async function assertExamUnlocked(userId: string, exam: { id: string; type: 'TOPIC_BLOCK' | 'MAIN_EXAM'; order: number }): Promise<string | null> {

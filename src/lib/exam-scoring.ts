@@ -1,11 +1,12 @@
 /**
  * Pure exam scoring logic — extracted for testability.
  * No database dependencies.
+ * Supports both single-choice and multi-select questions.
  */
 
 export interface ScoringInput {
-    questions: { id: string; correct: number }[]
-    answers: Record<string, number>
+    questions: { id: string; correct: number[] }[]
+    answers: Record<string, number[]>
 }
 
 export interface ScoringResult {
@@ -17,6 +18,8 @@ export interface ScoringResult {
 
 /**
  * Calculate exam score from questions and submitted answers.
+ * A question is correct only if ALL correct options are selected
+ * and NO incorrect options are selected.
  * @throws Error if exam has no questions
  */
 export function calculateExamScore(input: ScoringInput): ScoringResult {
@@ -29,7 +32,12 @@ export function calculateExamScore(input: ScoringInput): ScoringResult {
 
     let correctCount = 0
     questions.forEach((q) => {
-        if (answers[q.id] === q.correct) {
+        const userAnswers = answers[q.id] ?? []
+        const correctSet = new Set(q.correct)
+        const userSet = new Set(userAnswers)
+
+        // Check: same size AND all user answers are in correct set
+        if (correctSet.size === userSet.size && userAnswers.every(a => correctSet.has(a))) {
             correctCount++
         }
     })

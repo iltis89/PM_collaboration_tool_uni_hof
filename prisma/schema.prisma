@@ -109,7 +109,7 @@ model QuizQuestion {
   id       String   @id @default(cuid())
   question String
   options  String[] // Array of options
-  correct  Int      // Index of correct answer (0-based)
+  correct  Int[]    // Indices of correct answers (0-based), supports single & multi
   category String?  // e.g., "Layer 01", "Layer 02"
   explanation String? // Explanation for the correct answer
   exam     Exam?    @relation(fields: [examId], references: [id], onDelete: Cascade)

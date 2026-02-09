@@ -52,7 +52,7 @@ async function main() {
                 'Ein Projekt zeichnet sich durch Einmaligkeit, zeitliche Befristung, Komplexität, Neuartigkeit und definierte Ziele aus.',
                 'Projekte sind Aufgaben, die ausschließlich von externen Beratern durchgeführt werden.'
             ],
-            correct: 2,
+            correct: [2],
             category: 'Projektdefinition',
             explanation: 'Laut Skript (Seite 9–10) ist ein Projekt ein Vorhaben, das durch die Einmaligkeit der Bedingungen gekennzeichnet ist. Dazu gehören eine konkrete Zielvorgabe sowie zeitliche, finanzielle und personelle Begrenzungen. Es unterscheidet sich damit von alltäglichen Routineaufgaben.'
         },
@@ -65,7 +65,7 @@ async function main() {
                 'Warum machen wir das? Wer bezahlt das? Wann sind wir fertig? Wer ist der Chef?',
                 'Wie vermeiden wir Risiken? Wer haftet? Wo ist das Büro? Welche Software nutzen wir?'
             ],
-            correct: 1,
+            correct: [1],
             category: 'Projektmanagement Grundfragen',
             explanation: 'Auf Seite 11 werden vier zentrale Fragen aufgeführt, die sich jeder Projektmanager zu Beginn stellen sollte: 1. Was brauche ich für mein Projekt? 2. Was muss ich bei der Durchführung beachten? 3. Was muss ich im Rahmen des Projekts alles tun? 4. Was hilft mir dabei?'
         },
@@ -78,7 +78,7 @@ async function main() {
                 'Ausschließlich die Überwachung der Kosten und das Schreiben von Rechnungen.',
                 'Das Vermeiden von Entscheidungen, um Konflikte zu umgehen.'
             ],
-            correct: 1,
+            correct: [1],
             category: 'PM-Kernaufgaben',
             explanation: 'Das „Projektmanagement-Rad" auf Seite 12 visualisiert die Kernaufgaben. Dazu zählen: Organisieren, Planen, Informieren, Entscheiden, Steuern, Überwachen und Motivieren.'
         },
@@ -91,7 +91,7 @@ async function main() {
                 'Ideen entstehen nur, wenn das Budget am Jahresende noch nicht aufgebraucht ist.',
                 'Durch technische Entwicklungen, Kundenbedürfnisse (Marketingkonzepte) oder die Marktsituation (Wettbewerb).'
             ],
-            correct: 3,
+            correct: [3],
             category: 'Projektidee & Auslöser',
             explanation: 'Im Abschnitt „Wie entsteht eine Projektidee" (Seite 20) werden als Ansatzpunkte technische Entwicklungen, Kundenbedürfnisse (Marketingkonzepte) und die Marktsituation (Reaktion auf Wettbewerb) genannt.'
         },
@@ -104,7 +104,7 @@ async function main() {
                 'Aufgabe, Kompetenz, Verantwortung',
                 'Anfang, Kernphase, Vollendung'
             ],
-            correct: 2,
+            correct: [2],
             category: 'AKV-Prinzip',
             explanation: 'Auf Seite 21 wird im Kontext von Delegation und Organisation das AKV-Prinzip erläutert. Es steht für die Einheit von Aufgabe, Kompetenz und Verantwortung. Nur wenn diese drei im Gleichgewicht sind, funktioniert Delegation.'
         },
@@ -117,7 +117,7 @@ async function main() {
                 'Er dient dazu, das Projekt am Ende formell abzuschließen.',
                 'Er ist eine detaillierte technische Anleitung für die Produktentwicklung.'
             ],
-            correct: 0,
+            correct: [0],
             category: 'Projektauftrag',
             explanation: 'Der Projektauftrag (Seite 25) ist das formelle Startdokument. Er hält die Ausgangslage, Projektziele, Meilensteine, Kosten, Ressourcen und die Projektorganisation fest und dient als Genehmigungsgrundlage.'
         },
@@ -130,7 +130,7 @@ async function main() {
                 'Die Anzahl der Stakeholder im Projekt.',
                 'Das Budget für die Abschlussfeier.'
             ],
-            correct: 1,
+            correct: [1],
             category: 'Projektscope',
             explanation: 'Der Projektscope (Seite 27) beschreibt den eigentlichen Inhalt des Projekts. Essenziell ist die Unterscheidung: Was ist „in scope" (Teil des Projekts) und was ist „out of scope" (explizit nicht Teil des Projekts)?'
         },
@@ -143,7 +143,7 @@ async function main() {
                 'Start, Mitte, Ende, Nachbereitung, Urlaub.',
                 'Analyse, Design, Implementierung, Test, Wartung.'
             ],
-            correct: 1,
+            correct: [1],
             category: 'Projektphasen (DIN ISO 21500)',
             explanation: 'Auf Seite 28 wird das Phasenmodell nach DIN ISO 21500 vorgestellt. Die fünf Phasen sind: Initialisierungsphase, Definitionsphase, Planungsphase, Steuerungsphase (Durchführung & Controlling) und Abschlussphase.'
         },
@@ -156,7 +156,7 @@ async function main() {
                 'Er beschreibt die maximalen Kosten eines Arbeitspakets.',
                 'Er ist ein Synonym für das Projektende.'
             ],
-            correct: 0,
+            correct: [0],
             category: 'Meilensteine',
             explanation: 'Ebenfalls auf Seite 28 wird definiert: „Ein Meilenstein stellt keine zeitliche Dauer, sondern ein Ereignis dar." Meilensteine trennen die einzelnen Phasen voneinander und markieren wesentliche Zwischenergebnisse.'
         },
@@ -169,7 +169,7 @@ async function main() {
                 'Die Verwendung von moderner Software.',
                 'Zu viele Stakeholder mit positivem Interesse.'
             ],
-            correct: 1,
+            correct: [1],
             category: 'Gründe für Projektscheitern',
             explanation: 'Seite 35 listet explizit Gründe für das Scheitern auf. Dazu zählen: Ungenügende Projektdefinition, unklare Verantwortlichkeiten und zu knapp kalkulierte Ressourcen (Zeit und Personal).'
         },
@@ -182,7 +182,7 @@ async function main() {
                 'Wenn man ohne Planung einfach „drauflosarbeiten" möchte.',
                 'Wenn der Kunde erst am Ende des Projekts eingebunden werden soll, obwohl er nicht weiß, was er will.'
             ],
-            correct: 1,
+            correct: [1],
             category: 'Wasserfall-Methode',
             explanation: 'Auf Seite 40 wird das klassische Projektmanagement (Wasserfall) als linearer Prozess beschrieben. Es eignet sich, wenn das Projektergebnis und die Produkteigenschaften vorab präzise beschreibbar und festlegbar sind.'
         },
@@ -195,7 +195,7 @@ async function main() {
                 'Projektleiter, Assistent, Praktikant.',
                 'Chef, Kunde, Lieferant.'
             ],
-            correct: 0,
+            correct: [0],
             category: 'Scrum-Rollen',
             explanation: 'Seite 42 beschreibt die drei Hauptrollen im Scrum-Team: Product Owner (verantwortlich für Produkt & Backlog), Scrum Master (unterstützt Team & Prozess) und Entwicklungsteam (Umsetzung).'
         },
@@ -208,7 +208,7 @@ async function main() {
                 'Visualisierung des Arbeitsflusses (z.B. Board) und Limitierung der parallelen Aufgaben (WIP – Work in Progress).',
                 'Tägliche Meetings, die mindestens zwei Stunden dauern.'
             ],
-            correct: 2,
+            correct: [2],
             category: 'Kanban',
             explanation: 'Auf Seite 43 wird Kanban erklärt. Kernpunkte sind die Visualisierung des Arbeitsflusses (Kanban-Board) und die Limitierung der „Work in Progress" (WIP), um Überlastung zu vermeiden. Es gibt keine festen Sprints wie bei Scrum.'
         }

@@ -9,7 +9,7 @@ interface QuizQuestion {
     id: string;
     question: string;
     options: string[];
-    correct: number;
+    correct: number[];
     category: string | null;
     explanation: string | null;
 }
@@ -29,8 +29,8 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
     const router = useRouter();
     const [exam, setExam] = useState<Exam | null>(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState<{ [key: string]: number }>({});
-    const [checked, setChecked] = useState(false); // New state to track if current question was checked
+    const [answers, setAnswers] = useState<{ [key: string]: number[] }>({});
+    const [checked, setChecked] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -54,7 +54,7 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
         if (!exam) return;
         const result = await submitExam(exam.id, answers);
         if (result.success) {
-            alert('Lernmodul abgeschlossen! XP gutgeschrieben.');
+            alert('Lernmodul abgeschlossen! EP gutgeschrieben.');
             router.push('/exam-prep/history');
         } else {
             alert('Fehler: ' + result.error);
@@ -66,13 +66,34 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
         setCurrentQuestionIndex(prev => prev + 1);
     };
 
+    const toggleOption = (questionId: string, idx: number) => {
+        if (checked) return;
+        const current = answers[questionId] ?? [];
+        const isMulti = currentQuestion.correct.length > 1;
+
+        if (isMulti) {
+            // Multi-select: toggle option in/out
+            if (current.includes(idx)) {
+                setAnswers({ ...answers, [questionId]: current.filter(i => i !== idx) });
+            } else {
+                setAnswers({ ...answers, [questionId]: [...current, idx] });
+            }
+        } else {
+            // Single-select: replace
+            setAnswers({ ...answers, [questionId]: [idx] });
+        }
+    };
+
     if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Lade Modul...</div>;
     if (!exam) return <div style={{ padding: '40px', textAlign: 'center' }}>Modul nicht gefunden.</div>;
 
     const currentQuestion = exam.questions[currentQuestionIndex];
     const progress = ((currentQuestionIndex + 1) / exam.questions.length) * 100;
-    const selectedAnswer = answers[currentQuestion.id];
-    const isCorrect = selectedAnswer === currentQuestion.correct;
+    const selectedAnswers = answers[currentQuestion.id] ?? [];
+    const correctSet = new Set(currentQuestion.correct);
+    const selectedSet = new Set(selectedAnswers);
+    const isCorrect = correctSet.size === selectedSet.size && selectedAnswers.every(a => correctSet.has(a));
+    const isMultiSelect = currentQuestion.correct.length > 1;
 
 
 
@@ -85,8 +106,21 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
             <Card className="glass-card" style={{ padding: '48px', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', top: 0, left: 0, height: '4px', background: 'var(--primary)', width: `${progress}%`, transition: 'width 0.3s' }} />
 
-                <div style={{ marginBottom: '32px', color: 'var(--foreground-muted)' }}>
-                    Frage {currentQuestionIndex + 1} von {exam.questions.length}
+                <div style={{ marginBottom: '32px', color: 'var(--foreground-muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>Frage {currentQuestionIndex + 1} von {exam.questions.length}</span>
+                    {isMultiSelect && (
+                        <span style={{
+                            fontSize: '0.8rem',
+                            padding: '4px 12px',
+                            borderRadius: '12px',
+                            background: 'rgba(0, 255, 157, 0.1)',
+                            color: 'var(--primary)',
+                            border: '1px solid var(--primary)',
+                            fontWeight: 600
+                        }}>
+                            Mehrfachauswahl
+                        </span>
+                    )}
                 </div>
 
                 <h2 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '32px', lineHeight: 1.4 }}>
@@ -95,13 +129,14 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {currentQuestion.options.map((option: string, idx: number) => {
-                        const isSelected = selectedAnswer === idx;
+                        const isSelected = selectedAnswers.includes(idx);
+                        const isCorrectOption = correctSet.has(idx);
                         let borderColor = 'var(--border)';
                         let bgColor = 'transparent';
                         let textColor = 'var(--foreground)';
 
                         if (checked) {
-                            if (idx === currentQuestion.correct) {
+                            if (isCorrectOption) {
                                 borderColor = 'var(--success)';
                                 bgColor = 'rgba(76, 175, 80, 0.1)';
                                 textColor = 'var(--success)';
@@ -119,7 +154,7 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
                         return (
                             <button
                                 key={idx}
-                                onClick={() => !checked && setAnswers({ ...answers, [currentQuestion.id]: idx })}
+                                onClick={() => toggleOption(currentQuestion.id, idx)}
                                 disabled={checked}
                                 style={{
                                     padding: '20px',
@@ -131,9 +166,30 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
                                     cursor: checked ? 'default' : 'pointer',
                                     transition: 'all 0.2s',
                                     fontSize: '1rem',
-                                    opacity: (checked && !isSelected && idx !== currentQuestion.correct) ? 0.5 : 1
+                                    opacity: (checked && !isSelected && !isCorrectOption) ? 0.5 : 1,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px'
                                 }}
                             >
+                                {isMultiSelect && (
+                                    <span style={{
+                                        width: '20px',
+                                        height: '20px',
+                                        borderRadius: '4px',
+                                        border: `2px solid ${isSelected ? 'var(--primary)' : 'var(--border)'}`,
+                                        background: isSelected ? 'var(--primary)' : 'transparent',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0,
+                                        fontSize: '0.75rem',
+                                        color: isSelected ? 'black' : 'transparent',
+                                        transition: 'all 0.2s'
+                                    }}>
+                                        ✓
+                                    </span>
+                                )}
                                 {option}
                             </button>
                         );
@@ -155,15 +211,15 @@ export default function ExamRunner({ params }: { params: Promise<{ id: string }>
                     {!checked ? (
                         <button
                             onClick={() => setChecked(true)}
-                            disabled={selectedAnswer === undefined}
+                            disabled={selectedAnswers.length === 0}
                             style={{
                                 padding: '12px 32px',
-                                background: selectedAnswer !== undefined ? 'var(--accent)' : 'var(--surface-highlight)',
-                                color: selectedAnswer !== undefined ? 'white' : 'var(--foreground-muted)',
+                                background: selectedAnswers.length > 0 ? 'var(--accent)' : 'var(--surface-highlight)',
+                                color: selectedAnswers.length > 0 ? 'white' : 'var(--foreground-muted)',
                                 border: 'none',
                                 borderRadius: '4px',
                                 fontWeight: 600,
-                                cursor: selectedAnswer !== undefined ? 'pointer' : 'not-allowed',
+                                cursor: selectedAnswers.length > 0 ? 'pointer' : 'not-allowed',
                             }}
                         >
                             Auflösen
