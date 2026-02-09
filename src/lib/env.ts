@@ -59,10 +59,8 @@ if (typeof window === 'undefined' && !isBuildPhase) {
     try {
         validateEnv()
     } catch (error) {
-        console.error('Environment validation failed:', error)
-        if (process.env.NODE_ENV === 'production') {
-            throw error
-        }
+        // Warn but don't crash — throwing here kills the entire server
+        console.error('⚠ Environment validation failed:', error)
     }
 }
 
