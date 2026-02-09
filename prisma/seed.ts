@@ -114,19 +114,19 @@ async function main() {
         {
             question: 'Was ist die Hauptbeschränkung im magischen Dreieck des Projektmanagements?',
             options: ['Kosten', 'Qualität', 'Alle sind Beschränkungen (Zeit, Kosten, Umfang)', 'Ressourcen'],
-            correct: 2,
+            correct: [2],
             category: 'Layer 01',
         },
         {
             question: 'Welche Phase kommt zuerst im Projektlebenszyklus?',
             options: ['Durchführung', 'Planung', 'Initiierung', 'Abschluss'],
-            correct: 2,
+            correct: [2],
             category: 'Layer 01',
         },
         {
             question: 'Wer ist in Scrum für das Product Backlog verantwortlich?',
             options: ['Scrum Master', 'Product Owner', 'Entwicklungsteam', 'Stakeholder'],
-            correct: 1,
+            correct: [1],
             category: 'Layer 03',
         },
     ]

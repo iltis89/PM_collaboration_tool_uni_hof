@@ -9,7 +9,9 @@ async function main() {
     const examData = {
         title: 'Prüfungsvorbereitung: Wahlpflichtfach Projektmanagement',
         description: 'Hochschule Hof – Design und Mobilität. Selbstüberprüfung des Wissensstandes über Projektdefinition, Durchführung, Agiles Management, Design-Methodologie und Teamdynamik.',
-        duration: 20
+        duration: 20,
+        order: 6,
+        type: 'MAIN_EXAM' as const
     }
 
     // Check if exam exists and clean up if it does to ensure fresh data
